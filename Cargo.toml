@@ -1,0 +1,11 @@
+[package]
+name = "dsp_world_gen"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+dotnet35_rand_rs = "0.1.1"
+nalgebra = "0.32.3"
+bitflags = "2.4.1"
