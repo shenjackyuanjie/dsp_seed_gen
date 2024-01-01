@@ -1,6 +1,6 @@
 use dotnet35_rand_rs::DotNet35Random;
 
-use crate::data_struct::enums::{StarTypeEnum, SpectrTypeEnum};
+use crate::data_struct::enums::{SpectrTypeEnum, StarTypeEnum};
 use crate::data_struct::galaxy_data::GalaxyData;
 use crate::data_struct::game_desc::GameDesc;
 use crate::data_struct::vectors::VectorLF3;
