@@ -1,3 +1,5 @@
+use crate::data_struct::combat_setting::CombatSettings;
+
 pub struct GameDesc {
     pub galaxy_algo: i32,
     pub galaxy_seed: i32,
@@ -8,7 +10,7 @@ pub struct GameDesc {
     /// 资源倍率
     pub resource_multiplier: f32,
     /// 战斗模式设置
-    // pub combat_settings: CombatSettings
+    pub combat_settings: CombatSettings,
     /// RARE_RESOURCE_MULTIPLIER = 0.1f
     /// 稀有资源倍率
     pub rare_resource_multiplier: f32,
@@ -33,6 +35,7 @@ impl GameDesc {
             star_count,
             player_proto,
             resource_multiplier,
+            combat_settings: CombatSettings::new(),
             rare_resource_multiplier: rare_resource_multiplier.unwrap_or(0.1f32),
             infinite_resource_multiplier: infinite_resource_multiplier.unwrap_or(100f32),
         }

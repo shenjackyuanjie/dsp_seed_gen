@@ -90,4 +90,29 @@ impl StarData {
             // hive_astro_orbits: Vec::new(),
         }
     }
+
+    pub fn physics_radius(&self) -> f32 {
+        self.radius * K_PHYSICS_RADIUS_RATIO
+    }
+
+    pub fn view_radius(&self) -> f32 {
+        self.radius * K_VIEW_RADIUS_RATIO
+    }
+
+    pub fn astro_id(&self) -> i32 {
+        self.id * 100
+    }
+
+    pub fn dyson_lumino(&self) -> f32 {
+        let raw_value = self.luminosity.powf(0.33000001311302185);
+        (raw_value * 1000.0).round() / 1000.0
+    }
+
+    pub fn display_name(&self) -> String {
+        if self.override_name.len() > 0 {
+            self.override_name.clone()
+        } else {
+            self.name.clone()
+        }
+    }
 }

@@ -4,6 +4,7 @@ use crate::data_struct::enums::{SpectrTypeEnum, StarTypeEnum};
 use crate::data_struct::galaxy_data::GalaxyData;
 use crate::data_struct::game_desc::GameDesc;
 use crate::data_struct::star_data::StarData;
+use crate::data_struct::vectors::VectorLF3;
 use crate::gen::name_gen;
 
 use dotnet35_rand_rs::DotNet35Random;
@@ -48,7 +49,7 @@ pub fn rand_normal(average_value: f32, standard_deviation: f32, r1: f64, r2: f64
             * ((-2.0 * (1.0 - r1).ln()).sqrt() * (2.0 * std::f64::consts::PI * r2).sin()) as f32
 }
 
-pub fn create_birth_star(galaxy_data: Rc<GalaxyData>, game: &GameDesc, seed: i32) -> StarData {
+pub fn create_birth_star(galaxy_data: Rc<GalaxyData>, game_desc: &GameDesc, seed: i32) -> StarData {
     let mut star_data = StarData::new(galaxy_data, seed);
     // starData.galaxy = galaxy;
     // starData.index = 0;
@@ -122,7 +123,27 @@ pub fn create_birth_star(galaxy_data: Rc<GalaxyData>, game: &GameDesc, seed: i32
     if star_data.orbit_scaler < 1.0 {
         star_data.orbit_scaler = star_data.orbit_scaler * 0.4 + 1.0 * 0.6;
     }
-
+    // StarGen.SetStarAge(starData, starData.age, rn, rt);
+    // ?????
+    // 不是, 他原文先传进去一遍 star age, 然后再传 stardata.age 啥玩意
+    set_star_age(&mut star_data, star_data.age.to_owned(), rn, rt);
+    if star_data.dyson_radius * 40000.0 < star_data.physics_radius * 1.5 {
+        star_data.dyson_radius = star_data.physics_radius * 1.5 / 40000.0;
+    }
+    star_data.u_position = VectorLF3::zero();
+    star_data.name = name_gen::random_star_name(seed2, &star_data, &galaxy_data);
+    star_data.override_name = String::from("");
+    star_data.hive_pattern_level = 0;
+    star_data.safety_factor = 0.847 + num4 as f32 * 0.026;
+    let num8 = rng3.next_with_max(1000);
+    star_data.max_hive_count =
+        ((game_desc.combat_settings.max_density * 1000.0 + num8 as f32 + 0.5) / 1000.0) as i32;
+    let initial_colonize = game_desc.combat_settings.initial_colonize;
+    let num9 = if (initial_colonize * star_data.max_hive_count as f32) < 0.7 {
+        0
+    } else {
+        1
+    };
     todo!()
 }
 
