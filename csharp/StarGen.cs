@@ -359,6 +359,7 @@ public static class StarGen
 			starData.age = StarGen.specifyBirthStarAge;
 		}
 		float num6 = (1f - Mathf.Pow(Mathf.Clamp01(starData.age), 20f) * 0.5f) * starData.mass;
+        // !!!!!
 		starData.temperature = (float)(Math.Pow((double)num6, 0.56 + 0.14 / (Math.Log10((double)(num6 + 4f)) / Math.Log10(5.0))) * 4450.0 + 1300.0);
 		double num7 = Math.Log10(((double)starData.temperature - 1300.0) / 4500.0) / Math.Log10(2.6) - 0.5;
 		if (num7 < 0.0)
