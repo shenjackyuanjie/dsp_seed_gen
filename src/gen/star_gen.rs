@@ -50,7 +50,7 @@ pub fn rand_normal(average_value: f32, standard_deviation: f32, r1: f64, r2: f64
 }
 
 pub fn create_birth_star(galaxy_data: Rc<GalaxyData>, game_desc: &GameDesc, seed: i32) -> StarData {
-    let mut star_data = StarData::new(galaxy_data, seed);
+    let mut star_data = StarData::new(galaxy_data.clone(), seed);
     // starData.galaxy = galaxy;
     // starData.index = 0;
     // starData.level = 0f;
@@ -73,10 +73,10 @@ pub fn create_birth_star(galaxy_data: Rc<GalaxyData>, game_desc: &GameDesc, seed
     let y = rng2.next_double() * 0.4 - 0.2;
     let radius_base = 2f64.powf(y);
     let mut rng3 = DotNet35Random::new(rng2.next());
-    let num4 = rng3.next_double();
-    let mut num5 = rand_normal(0.0, 0.08, r, r2);
-    num5 = num5.clamp(-0.2, 0.2);
-    star_data.mass = 2f32.powf(num5);
+    let safety_factor = rng3.next_double();
+    let mut mass_factor = rand_normal(0.0, 0.08, r, r2);
+    mass_factor = mass_factor.clamp(-0.2, 0.2);
+    star_data.mass = 2f32.powf(mass_factor);
     if SPECIFY_BIRTH_STAR_MASS > 0.1 {
         star_data.mass = SPECIFY_BIRTH_STAR_MASS;
     }
@@ -126,25 +126,56 @@ pub fn create_birth_star(galaxy_data: Rc<GalaxyData>, game_desc: &GameDesc, seed
     // StarGen.SetStarAge(starData, starData.age, rn, rt);
     // ?????
     // 不是, 他原文先传进去一遍 star age, 然后再传 stardata.age 啥玩意
-    set_star_age(&mut star_data, star_data.age.to_owned(), rn, rt);
-    if star_data.dyson_radius * 40000.0 < star_data.physics_radius * 1.5 {
-        star_data.dyson_radius = star_data.physics_radius * 1.5 / 40000.0;
+    let age = star_data.age;
+    set_star_age(&mut star_data, age, rn, rt);
+    if star_data.dyson_radius * 40000.0 < star_data.physics_radius() * 1.5 {
+        star_data.dyson_radius = star_data.physics_radius() * 1.5 / 40000.0;
     }
     star_data.u_position = VectorLF3::zero();
     star_data.name = name_gen::random_star_name(seed2, &star_data, &galaxy_data);
     star_data.override_name = String::from("");
     star_data.hive_pattern_level = 0;
-    star_data.safety_factor = 0.847 + num4 as f32 * 0.026;
-    let num8 = rng3.next_with_max(1000);
+    star_data.safety_factor = 0.847 + safety_factor as f32 * 0.026;
+    let hive_count_adjustment_factor = rng3.next_with_max(1000);
     star_data.max_hive_count =
-        ((game_desc.combat_settings.max_density * 1000.0 + num8 as f32 + 0.5) / 1000.0) as i32;
+        ((game_desc.combat_settings.max_density * 1000.0 + hive_count_adjustment_factor as f32 + 0.5) / 1000.0) as i32;
     let initial_colonize = game_desc.combat_settings.initial_colonize;
-    let num9 = if (initial_colonize * star_data.max_hive_count as f32) < 0.7 {
+    let colonize_check_result = if (initial_colonize * star_data.max_hive_count as f32) < 0.7 {
         0
     } else {
         1
     };
-    todo!()
+    if initial_colonize < 0.015 {
+        star_data.initial_hive_count = 0;
+    } else {
+        let mut base_initial_hive_count = 0.6 * initial_colonize * star_data.max_hive_count as f32;
+        let mut standard_deviation = 0.5;
+        if base_initial_hive_count < 1.0 {
+            standard_deviation = base_initial_hive_count.sqrt() * 0.29 + 0.21;
+        } else if base_initial_hive_count > star_data.max_hive_count as f32 {
+            base_initial_hive_count = star_data.max_hive_count as f32;
+        }
+        let mut i = 16;
+        loop {
+            let r3 = rng3.next_double();
+            let r4 = rng3.next_double();
+            star_data.initial_hive_count =
+                (rand_normal(base_initial_hive_count, standard_deviation, r3, r4) + 0.5) as i32;
+            i -= 1;
+            if i <= 0
+                || (star_data.initial_hive_count >= 0
+                    && star_data.initial_hive_count <= star_data.max_hive_count)
+            {
+                break;
+            }
+        }
+        if star_data.initial_hive_count < colonize_check_result {
+            star_data.initial_hive_count = colonize_check_result;
+        } else if star_data.initial_hive_count > star_data.max_hive_count {
+            star_data.initial_hive_count = star_data.max_hive_count;
+        }
+    }
+    star_data
 }
 
 pub fn set_star_age(star: &mut StarData, age: f32, rn: f64, rt: f64) {
