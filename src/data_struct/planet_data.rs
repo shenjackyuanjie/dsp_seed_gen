@@ -1,3 +1,4 @@
+use std::cell::RefCell;
 use std::rc::Rc;
 
 use crate::data_struct::enums::{PlanetSingularityEnum, PlanetTypeEnum};
@@ -5,9 +6,14 @@ use crate::data_struct::galaxy_data::GalaxyData;
 use crate::data_struct::star_data::StarData;
 use crate::data_struct::vectors::{VectorLF3, VectorLF4};
 
+use super::galaxy_data;
+
+pub const K_ENTER_ALTITUDE: f32 = 1000.0;
+pub const K_BIRTH_HEIGHT_SHIFT: f32 = 1.45;
+
 pub struct PlanetData {
     /// 星系数据
-    pub galaxy: Rc<GalaxyData>,
+    pub galaxy: Rc<RefCell<GalaxyData>>,
     /// 星星数据
     pub star: StarData,
     /// 种子
@@ -85,7 +91,7 @@ pub struct PlanetData {
     /// 样式
     pub style: i32,
     /// 绕行行星
-    pub orbit_around_planet: Rc<PlanetData>,
+    pub orbit_around_planet: Option<Rc<PlanetData>>,
     /// 运行时位置
     pub runtime_position: VectorLF3,
     /// 下一个运行时位置
@@ -109,7 +115,7 @@ pub struct PlanetData {
     /// 运行时本地太阳方向
     pub runtime_local_sun_direction: VectorLF3,
     /// 模型数据
-    pub mod_data: Vec<u8>,
+    // pub mod_data: Vec<u8>,
     /// 精度
     pub precision: i32,
     /// 段
@@ -123,4 +129,66 @@ pub struct PlanetData {
     /// 矿物偏向向量
     pub vein_bias_vector: VectorLF3,
     // ... 其他字段
+}
+
+impl PlanetData {
+    pub fn new(galaxy_data: Rc<RefCell<GalaxyData>>, seed: i32, info_seed: i32) -> Self {
+        Self {
+            galaxy: galaxy_data.clone(),
+            star: StarData::new(galaxy_data.clone(), seed),
+            seed,
+            info_seed,
+            id: 0,
+            index: 0,
+            orbit_around: 0,
+            number: 0,
+            orbit_index: 0,
+            name: "".to_string(),
+            override_name: "".to_string(),
+            orbit_radius: 1.0,
+            orbit_inclination: 0.0,
+            orbit_longitude: 0.0,
+            orbital_period: 3600.0,
+            orbit_phase: 0.0,
+            obliquity: 0.0,
+            rotation_period: 480.0,
+            rotation_phase: 0.0,
+            radius: 200.0,
+            scale: 1.0,
+            sun_distance: 0.0,
+            habitable_bias: 0.0,
+            temperature_bias: 0.0,
+            ion_height: 0.0,
+            wind_strength: 0.0,
+            luminosity: 0.0,
+            land_percent: 0.0,
+            mod_x: 0.0,
+            mod_y: 0.0,
+            water_height: 0.0,
+            water_item_id: 0,
+            levelized: false,
+            ice_flag: 0,
+            r#type: PlanetTypeEnum::None,
+            singularity: PlanetSingularityEnum::NONE,
+            theme: 0,
+            algo_id: 0,
+            style: 0,
+            orbit_around_planet: None,
+            runtime_position: VectorLF3::zero(),
+            runtime_position_next: VectorLF3::zero(),
+            runtime_rotation: VectorLF4::zero(),
+            runtime_rotation_next: VectorLF4::zero(),
+            runtime_system_rotation: VectorLF4::zero(),
+            runtime_orbit_rotation: VectorLF4::zero(),
+            runtime_orbit_phase: 0.0,
+            runtime_rotation_phase: 0.0,
+            u_position: VectorLF3::zero(),
+            u_position_next: VectorLF3::zero(),
+            runtime_local_sun_direction: VectorLF3::zero(),
+            // mod_data: vec![],
+            precision: 160,
+            segment: 5,
+            vein_bias_vector: VectorLF3::zero(),
+        }
+    }
 }
