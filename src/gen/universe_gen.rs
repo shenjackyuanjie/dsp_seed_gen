@@ -1,7 +1,7 @@
 use dotnet35_rand_rs::DotNet35Random;
 
 use crate::data_struct::enums::{SpectrTypeEnum, StarTypeEnum};
-use crate::data_struct::galaxy_data::GalaxyData;
+use crate::data_struct::galaxy_data::{self, GalaxyData};
 use crate::data_struct::game_desc::GameDesc;
 use crate::data_struct::vectors::VectorLF3;
 
@@ -25,13 +25,7 @@ pub fn create_galaxy(game: GameDesc) -> GalaxyData {
     let (tmp_poses, tmp_drunk) =
         generate_temp_poses(rand.next(), game.star_count, 4, 2.0, 2.3, 3.5, 0.18);
     let num = tmp_poses.len() as i32;
-    let mut galaxy_data = GalaxyData {
-        seed: game.galaxy_seed,
-        star_count: game.star_count,
-        birth_planet_id: 0,
-        birth_star_id: 0,
-        habitable_count: 0,
-    };
+    let mut galaxy_data = GalaxyData::new(game.galaxy_seed, game.star_count);
     if tmp_poses.len() <= 0 {
         return galaxy_data;
     }
