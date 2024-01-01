@@ -1,4 +1,7 @@
+use std::rc::Rc;
+
 use crate::data_struct::enums::{SpectrTypeEnum, StarTypeEnum};
+use crate::data_struct::galaxy_data::GalaxyData;
 use crate::data_struct::planet_data::PlanetData;
 use crate::data_struct::vectors::VectorLF3;
 
@@ -8,7 +11,7 @@ pub const K_VIEW_RADIUS_RATIO: f32 = 800.0;
 pub const K_MAX_DFHIVE_ORBIT: i32 = 8;
 
 pub struct StarData {
-    // pub galaxy: GalaxyData,
+    pub galaxy: Rc<GalaxyData>,
     pub seed: i32,
     pub index: i32,
     pub id: i32,
@@ -44,4 +47,47 @@ pub struct StarData {
     pub initial_hive_count: i32,
     pub max_hive_count: i32,
     // pub hive_astro_orbits: Vec<AstroOrbitData>,
+}
+
+impl StarData {
+    pub fn new(galaxy: Rc<GalaxyData>, seed: i32) -> Self {
+        StarData {
+            galaxy,
+            seed,
+            index: 0,
+            id: 0,
+            name: String::new(),
+            override_name: String::new(),
+            position: VectorLF3::zero(),
+            u_position: VectorLF3::zero(),
+            mass: 0.0,
+            lifetime: 0.0,
+            age: 0.0,
+            star_type: StarTypeEnum::MainSeqStar,
+            temperature: 0.0,
+            spectr: SpectrTypeEnum::M,
+            class_factor: 0.0,
+            color: 0.0,
+            luminosity: 0.0,
+            radius: 0.0,
+            acdisk_radius: 0.0,
+            habitable_radius: 0.0,
+            light_balance_radius: 0.0,
+            dyson_radius: 0.0,
+            orbit_scaler: 0.0,
+            aster_belt1_orbit_index: 0.0,
+            aster_belt2_orbit_index: 0.0,
+            aster_belt1_radius: 0.0,
+            aster_belt2_radius: 0.0,
+            planet_count: 0,
+            level: 0.0,
+            resource_coef: 0.0,
+            planets: Vec::new(),
+            safety_factor: 0.0,
+            hive_pattern_level: 0,
+            initial_hive_count: 0,
+            max_hive_count: 0,
+            // hive_astro_orbits: Vec::new(),
+        }
+    }
 }
