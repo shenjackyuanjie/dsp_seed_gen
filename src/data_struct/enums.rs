@@ -28,14 +28,28 @@ pub enum StarTypeEnum {
     NeutronStar,
     BlackHole,
 }
-
 pub enum SpectrTypeEnum {
-    M,
-    K,
-    G,
-    F,
-    A,
-    B,
-    O,
-    X,
+    M = -4,
+    K = -3,
+    G = -2,
+    F = -1,
+    A = 0,
+    B = 1,
+    O = 2,
+    X = 3,
+}
+
+impl SpectrTypeEnum {
+    pub fn new(star_type: i32) -> SpectrTypeEnum {
+        match star_type {
+            -4 => SpectrTypeEnum::M,
+            -3 => SpectrTypeEnum::K,
+            -2 => SpectrTypeEnum::G,
+            -1 => SpectrTypeEnum::F,
+            0 => SpectrTypeEnum::A,
+            1 => SpectrTypeEnum::B,
+            2 => SpectrTypeEnum::O,
+            _ => SpectrTypeEnum::X,
+        }
+    }
 }
