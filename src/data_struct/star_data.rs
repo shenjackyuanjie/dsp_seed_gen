@@ -1,3 +1,4 @@
+use std::cell::RefCell;
 use std::rc::Rc;
 
 use crate::data_struct::enums::{SpectrTypeEnum, StarTypeEnum};
@@ -11,7 +12,7 @@ pub const K_VIEW_RADIUS_RATIO: f32 = 800.0;
 pub const K_MAX_DFHIVE_ORBIT: i32 = 8;
 
 pub struct StarData {
-    pub galaxy: Rc<GalaxyData>,
+    pub galaxy: Rc<RefCell<GalaxyData>>,
     pub seed: i32,
     pub index: i32,
     pub id: i32,
@@ -50,7 +51,7 @@ pub struct StarData {
 }
 
 impl StarData {
-    pub fn new(galaxy: Rc<GalaxyData>, seed: i32) -> Self {
+    pub fn new(galaxy: Rc<RefCell<GalaxyData>>, seed: i32) -> Self {
         StarData {
             galaxy,
             seed,

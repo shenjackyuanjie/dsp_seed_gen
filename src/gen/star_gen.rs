@@ -1,3 +1,4 @@
+use std::cell::RefCell;
 use std::rc::Rc;
 
 use crate::data_struct::enums::{SpectrTypeEnum, StarTypeEnum};
@@ -49,7 +50,11 @@ pub fn rand_normal(average_value: f32, standard_deviation: f32, r1: f64, r2: f64
             * ((-2.0 * (1.0 - r1).ln()).sqrt() * (2.0 * std::f64::consts::PI * r2).sin()) as f32
 }
 
-pub fn create_birth_star(galaxy_data: Rc<GalaxyData>, game_desc: &GameDesc, seed: i32) -> StarData {
+pub fn create_birth_star(
+    galaxy_data: Rc<RefCell<GalaxyData>>,
+    game_desc: &GameDesc,
+    seed: i32,
+) -> StarData {
     let mut star_data = StarData::new(galaxy_data.clone(), seed);
     // starData.galaxy = galaxy;
     // starData.index = 0;
@@ -132,13 +137,15 @@ pub fn create_birth_star(galaxy_data: Rc<GalaxyData>, game_desc: &GameDesc, seed
         star_data.dyson_radius = star_data.physics_radius() * 1.5 / 40000.0;
     }
     star_data.u_position = VectorLF3::zero();
-    star_data.name = name_gen::random_star_name(seed2, &star_data, &galaxy_data);
+    star_data.name = name_gen::random_star_name(seed2, &star_data, &galaxy_data.borrow());
     star_data.override_name = String::from("");
     star_data.hive_pattern_level = 0;
     star_data.safety_factor = 0.847 + safety_factor as f32 * 0.026;
     let hive_count_adjustment_factor = rng3.next_with_max(1000);
-    star_data.max_hive_count =
-        ((game_desc.combat_settings.max_density * 1000.0 + hive_count_adjustment_factor as f32 + 0.5) / 1000.0) as i32;
+    star_data.max_hive_count = ((game_desc.combat_settings.max_density * 1000.0
+        + hive_count_adjustment_factor as f32
+        + 0.5)
+        / 1000.0) as i32;
     let initial_colonize = game_desc.combat_settings.initial_colonize;
     let colonize_check_result = if (initial_colonize * star_data.max_hive_count as f32) < 0.7 {
         0

@@ -1,9 +1,13 @@
+use std::cell::RefCell;
+use std::rc::Rc;
+
 use dotnet35_rand_rs::DotNet35Random;
 
 use crate::data_struct::enums::{SpectrTypeEnum, StarTypeEnum};
-use crate::data_struct::galaxy_data::{self, GalaxyData};
+use crate::data_struct::galaxy_data::GalaxyData;
 use crate::data_struct::game_desc::GameDesc;
 use crate::data_struct::vectors::VectorLF3;
+use crate::gen::star_gen;
 
 pub static ALGO_VERSION: i32 = 20200403;
 pub const PLANET_ID_MAX: i32 = 256;
@@ -29,6 +33,7 @@ pub fn create_galaxy(game: GameDesc) -> GalaxyData {
     if tmp_poses.len() <= 0 {
         return galaxy_data;
     }
+    let mut galaxy_data = Rc::new(RefCell::new(galaxy_data));
     let num2 = rand.next_double() as f32;
     let num3 = rand.next_double() as f32;
     let num4 = rand.next_double() as f32;
@@ -45,7 +50,8 @@ pub fn create_galaxy(game: GameDesc) -> GalaxyData {
     for i in 0..num {
         let seed = rand.next();
         if i == 0 {
-            // galaxy_data.stars[i] = StarGen::create_birth_star(&galaxy_data, &game, seed);
+            galaxy_data.borrow_mut().stars[i as usize] =
+                star_gen::create_birth_star(galaxy_data.clone(), &game, seed);
         } else {
             let mut need_spectr = SpectrTypeEnum::X;
             if i == 3 {
