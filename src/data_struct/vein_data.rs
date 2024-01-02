@@ -28,7 +28,7 @@ pub struct VeinData {
 }
 
 impl VeinData {
-    pub fn new(id: i32, vein_type: EVeinType) -> Self { 
+    pub fn new(id: i32, vein_type: EVeinType) -> Self {
         VeinData {
             id,
             vein_type,
@@ -86,7 +86,11 @@ impl VeinData {
     }
 
     pub fn add_miner(&mut self, miner_id: i32) {
-        if miner_id == self.miner_id0 || miner_id == self.miner_id1 || miner_id == self.miner_id2 || miner_id == self.miner_id3 {
+        if miner_id == self.miner_id0
+            || miner_id == self.miner_id1
+            || miner_id == self.miner_id2
+            || miner_id == self.miner_id3
+        {
             return;
         }
         if self.miner_id0 == 0 {

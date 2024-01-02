@@ -30,5 +30,5 @@ impl VegeData {
             model_id: 0,
             collider_id: 0,
         }
-    }   
+    }
 }
