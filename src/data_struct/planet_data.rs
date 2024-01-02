@@ -1,7 +1,7 @@
 use std::cell::RefCell;
 use std::rc::Rc;
 
-use crate::data_struct::enums::{PlanetSingularityEnum, PlanetTypeEnum};
+use crate::data_struct::enums::{EPlanetSingularity, EPlanetType};
 use crate::data_struct::galaxy_data::GalaxyData;
 use crate::data_struct::star_data::StarData;
 use crate::data_struct::vectors::{VectorLF3, VectorLF4};
@@ -81,9 +81,9 @@ pub struct PlanetData {
     /// 冰旗
     pub ice_flag: i32,
     /// 类型
-    pub r#type: PlanetTypeEnum,
+    pub r#type: EPlanetType,
     /// 奇点
-    pub singularity: PlanetSingularityEnum,
+    pub singularity: EPlanetSingularity,
     /// 主题
     pub theme: i32,
     /// 算法ID
@@ -168,8 +168,8 @@ impl PlanetData {
             water_item_id: 0,
             levelized: false,
             ice_flag: 0,
-            r#type: PlanetTypeEnum::None,
-            singularity: PlanetSingularityEnum::NONE,
+            r#type: EPlanetType::None,
+            singularity: EPlanetSingularity::NONE,
             theme: 0,
             algo_id: 0,
             style: 0,

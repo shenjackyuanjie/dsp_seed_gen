@@ -3,7 +3,7 @@ use std::rc::Rc;
 
 use dotnet35_rand_rs::DotNet35Random;
 
-use crate::data_struct::enums::{SpectrTypeEnum, StarTypeEnum};
+use crate::data_struct::enums::{ESpectrType, EStarType};
 use crate::data_struct::galaxy_data::GalaxyData;
 use crate::data_struct::game_desc::GameDesc;
 use crate::data_struct::vectors::VectorLF3;
@@ -53,22 +53,22 @@ pub fn create_galaxy(game: GameDesc) -> GalaxyData {
             galaxy_data.borrow_mut().stars[i as usize] =
                 star_gen::create_birth_star(galaxy_data.clone(), &game, seed);
         } else {
-            let mut need_spectr = SpectrTypeEnum::X;
+            let mut need_spectr = ESpectrType::X;
             if i == 3 {
-                need_spectr = SpectrTypeEnum::M;
+                need_spectr = ESpectrType::M;
             } else if i == num12 - 1 {
-                need_spectr = SpectrTypeEnum::O;
+                need_spectr = ESpectrType::O;
             }
-            let mut need_type = StarTypeEnum::MainSeqStar;
+            let mut need_type = EStarType::MainSeqStar;
             if i % num13 == num14 {
-                need_type = StarTypeEnum::GiantStar;
+                need_type = EStarType::GiantStar;
             }
             if i >= num10 {
-                need_type = StarTypeEnum::BlackHole;
+                need_type = EStarType::BlackHole;
             } else if i >= num11 {
-                need_type = StarTypeEnum::NeutronStar;
+                need_type = EStarType::NeutronStar;
             } else if i >= num12 {
-                need_type = StarTypeEnum::WhiteDwarf;
+                need_type = EStarType::WhiteDwarf;
             }
             // galaxy_data.stars[i] = StarGen::create_star(&galaxy_data, &tmp_poses[i], &game, i + 1, seed, need_type, need_spectr);
         }

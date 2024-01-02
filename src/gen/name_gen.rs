@@ -1,4 +1,4 @@
-use crate::data_struct::enums::StarTypeEnum;
+use crate::data_struct::enums::EStarType;
 use crate::data_struct::galaxy_data::GalaxyData;
 use crate::data_struct::star_data::StarData;
 
@@ -56,7 +56,7 @@ pub fn _random_star_name(seed: i32, star_data: &StarData) -> String {
     let num = rng.next_double();
     let num2 = rng.next_double();
     match star_data.star_type {
-        StarTypeEnum::GiantStar => {
+        EStarType::GiantStar => {
             if num2 < 0.4000000059604645 {
                 random_giant_star_name_from_raw_names(seed2)
             } else if num2 < 0.699999988079071 {
@@ -65,8 +65,8 @@ pub fn _random_star_name(seed: i32, star_data: &StarData) -> String {
                 random_giant_star_name_with_format(seed2)
             }
         }
-        StarTypeEnum::NeutronStar => random_neutron_star_name_with_format(seed2),
-        StarTypeEnum::BlackHole => random_black_hole_name_with_format(seed2),
+        EStarType::NeutronStar => random_neutron_star_name_with_format(seed2),
+        EStarType::BlackHole => random_black_hole_name_with_format(seed2),
         _ => {
             if num < 0.6000000238418579 {
                 random_star_name_from_raw_names(seed2)

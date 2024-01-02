@@ -1,6 +1,7 @@
 use bitflags::bitflags;
 
-pub enum PlanetTypeEnum {
+#[derive(Debug, Clone, Copy)]
+pub enum EPlanetType {
     None,
     Vocano,
     Ocean,
@@ -10,7 +11,8 @@ pub enum PlanetTypeEnum {
 }
 
 bitflags! {
-    pub struct PlanetSingularityEnum: u32 {
+    #[derive(Debug, Clone, Copy)]
+    pub struct EPlanetSingularity: u32 {
         const NONE = 0;
         const TIDAL_LOCKED = 1;
         const TIDAL_LOCKED2 = 2;
@@ -21,14 +23,17 @@ bitflags! {
     }
 }
 
-pub enum StarTypeEnum {
+#[derive(Debug, Clone, Copy)]
+pub enum EStarType {
     MainSeqStar,
     GiantStar,
     WhiteDwarf,
     NeutronStar,
     BlackHole,
 }
-pub enum SpectrTypeEnum {
+
+#[derive(Debug, Clone, Copy)]
+pub enum ESpectrType {
     M = -4,
     K = -3,
     G = -2,
@@ -39,17 +44,37 @@ pub enum SpectrTypeEnum {
     X = 3,
 }
 
-impl SpectrTypeEnum {
-    pub fn new(star_type: i32) -> SpectrTypeEnum {
+impl ESpectrType {
+    pub fn new(star_type: i32) -> ESpectrType {
         match star_type {
-            -4 => SpectrTypeEnum::M,
-            -3 => SpectrTypeEnum::K,
-            -2 => SpectrTypeEnum::G,
-            -1 => SpectrTypeEnum::F,
-            0 => SpectrTypeEnum::A,
-            1 => SpectrTypeEnum::B,
-            2 => SpectrTypeEnum::O,
-            _ => SpectrTypeEnum::X,
+            -4 => ESpectrType::M,
+            -3 => ESpectrType::K,
+            -2 => ESpectrType::G,
+            -1 => ESpectrType::F,
+            0 => ESpectrType::A,
+            1 => ESpectrType::B,
+            2 => ESpectrType::O,
+            _ => ESpectrType::X,
         }
     }
+}
+
+#[derive(Debug, Clone, Copy)]
+pub enum EVeinType {
+    None,
+    Iron,
+    Copper,
+    Silicium,
+    Titanium,
+    Stone,
+    Coal,
+    Oil,
+    Fireice,
+    Diamond,
+    Fractal,
+    Crysrub,
+    Grat,
+    Bamboo,
+    Mag,
+    Max,
 }

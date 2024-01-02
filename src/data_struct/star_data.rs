@@ -1,7 +1,7 @@
 use std::cell::RefCell;
 use std::rc::Rc;
 
-use crate::data_struct::enums::{SpectrTypeEnum, StarTypeEnum};
+use crate::data_struct::enums::{ESpectrType, EStarType};
 use crate::data_struct::galaxy_data::GalaxyData;
 use crate::data_struct::planet_data::PlanetData;
 use crate::data_struct::vectors::VectorLF3;
@@ -23,9 +23,9 @@ pub struct StarData {
     pub mass: f32,
     pub lifetime: f32,
     pub age: f32,
-    pub star_type: StarTypeEnum,
+    pub star_type: EStarType,
     pub temperature: f32,
-    pub spectr: SpectrTypeEnum,
+    pub spectr: ESpectrType,
     pub class_factor: f32,
     pub color: f32,
     pub luminosity: f32,
@@ -64,9 +64,9 @@ impl StarData {
             mass: 0.0,
             lifetime: 0.0,
             age: 0.0,
-            star_type: StarTypeEnum::MainSeqStar,
+            star_type: EStarType::MainSeqStar,
             temperature: 0.0,
-            spectr: SpectrTypeEnum::M,
+            spectr: ESpectrType::M,
             class_factor: 0.0,
             color: 0.0,
             luminosity: 0.0,

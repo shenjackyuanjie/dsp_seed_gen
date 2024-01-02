@@ -1,7 +1,7 @@
 use std::cell::RefCell;
 use std::rc::Rc;
 
-use crate::data_struct::enums::{SpectrTypeEnum, StarTypeEnum};
+use crate::data_struct::enums::{ESpectrType, EStarType};
 use crate::data_struct::galaxy_data::GalaxyData;
 use crate::data_struct::game_desc::GameDesc;
 use crate::data_struct::star_data::StarData;
@@ -115,7 +115,7 @@ pub fn create_birth_star(
     } else if temperature_factor < -4.0 {
         temperature_factor = -4.0;
     }
-    star_data.spectr = SpectrTypeEnum::new((temperature_factor + 4.0).round() as i32);
+    star_data.spectr = ESpectrType::new((temperature_factor + 4.0).round() as i32);
     star_data.color = ((temperature_factor + 3.5) * 0.2).min(1.0) as f32;
     star_data.class_factor = temperature_factor as f32;
     star_data.luminosity = mass_factor.powf(0.7);
@@ -198,7 +198,7 @@ pub fn set_star_age(star: &mut StarData, age: f32, rn: f64, rt: f64) {
                 radius_factor = (radius_factor * 0.1).log10() + 1.0 * 10.0;
             }
             let mass_factor = 1.0 - age.powf(30.0) * 0.5;
-            star.star_type = StarTypeEnum::GiantStar;
+            star.star_type = EStarType::GiantStar;
             star.mass = mass_factor * star.mass;
             star.radius = radius_factor * temperature_factor;
             star.acdisk_radius = 0.0;
@@ -211,8 +211,8 @@ pub fn set_star_age(star: &mut StarData, age: f32, rn: f64, rt: f64) {
         return;
     }
     if star.mass >= 18.0 {
-        star.star_type = StarTypeEnum::BlackHole;
-        star.spectr = SpectrTypeEnum::X;
+        star.star_type = EStarType::BlackHole;
+        star.spectr = ESpectrType::X;
         star.mass *= 2.5 * temperature_factor;
         star.radius *= 1.0;
         star.acdisk_radius = star.radius * 5.0;
@@ -224,8 +224,8 @@ pub fn set_star_age(star: &mut StarData, age: f32, rn: f64, rt: f64) {
         return;
     }
     if star.mass >= 7.0 {
-        star.star_type = StarTypeEnum::NeutronStar;
-        star.spectr = SpectrTypeEnum::X;
+        star.star_type = EStarType::NeutronStar;
+        star.spectr = ESpectrType::X;
         star.mass *= 0.2 * age_factor;
         star.radius *= 0.15;
         star.acdisk_radius = star.radius * 9.0;
@@ -237,8 +237,8 @@ pub fn set_star_age(star: &mut StarData, age: f32, rn: f64, rt: f64) {
         star.color = 1.0;
         return;
     }
-    star.star_type = StarTypeEnum::WhiteDwarf;
-    star.spectr = SpectrTypeEnum::X;
+    star.star_type = EStarType::WhiteDwarf;
+    star.spectr = ESpectrType::X;
     star.mass *= 0.2 * age_factor;
     star.radius *= 0.2;
     star.acdisk_radius = 0.0;
