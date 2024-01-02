@@ -14,3 +14,21 @@ pub struct VegeData {
     pub model_id: i32,
     pub collider_id: i32,
 }
+
+impl VegeData {
+    pub fn new(id: i32, proto_id: i16) -> Self {
+        VegeData {
+            id,
+            proto_id,
+            model_index: 0,
+            hash: SimpleHash::new(),
+            hash_address: 0,
+            combat_stat_id: 0,
+            pos: VectorLF3::zero(),
+            rot: VectorLF4::zero(),
+            scl: VectorLF3::zero(),
+            model_id: 0,
+            collider_id: 0,
+        }
+    }   
+}

@@ -3,6 +3,14 @@ pub struct SimpleHash {
 }
 
 impl SimpleHash {
+    pub fn new() -> Self {
+        SimpleHash { bits: 0 }
+    }
+
+    pub fn new_with_bits(bits: u32) -> Self {
+        SimpleHash { bits }
+    }
+
     pub fn set_empty(&mut self) {
         self.bits = 0;
     }
