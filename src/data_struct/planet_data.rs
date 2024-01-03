@@ -127,6 +127,7 @@ pub struct PlanetData {
     /// 矿物偏向向量
     pub vein_bias_vector: VectorLF3,
     // ... 其他字段
+    // TODO
 }
 
 impl PlanetData {

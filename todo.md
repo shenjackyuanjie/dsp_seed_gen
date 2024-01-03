@@ -25,7 +25,18 @@
 
 - [x] [`simple_hash`](src/data_struct/simple_hash.rs)
 
+- [ ] `AstroOrbitData`
+  - [ ] 转换为 rust 代码
+  - [ ] `PredictPose`
+  - [ ] `GetVelocityAtPoint`
+  - [ ] `GetEstimatePointOffset`
 
+- [ ] [`planet_data`](src/data_struct/planet_data.rs)
+  - [ ] 完善成员
+- [ ] [`planet_raw_data`](src/data_struct/planet_raw_data.rs)
+  - [ ] 完善方法
+
+- [ ] [`star_data`](src/data_struct/star_data.rs)
 
 ## 生成
 
