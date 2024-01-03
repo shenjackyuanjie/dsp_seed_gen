@@ -4,6 +4,7 @@ use crate::data_struct::star_data::StarData;
 
 use dotnet35_rand_rs::DotNet35Random;
 
+/// 给定种子，直接返回一个随机名称
 pub fn random_name(seed: i32) -> String {
     let mut rng = DotNet35Random::new(seed);
     let num = (rng.next_double() * 1.8 + 2.3) as usize;
@@ -39,6 +40,7 @@ pub fn random_name(seed: i32) -> String {
     }
 }
 
+/// 给定种子，返回一个随机恒星名称
 pub fn random_star_name(seed: i32, star_data: &StarData, galaxy: &GalaxyData) -> String {
     let mut rng = DotNet35Random::new(seed);
     for _ in 0..256 {
@@ -50,6 +52,8 @@ pub fn random_star_name(seed: i32, star_data: &StarData, galaxy: &GalaxyData) ->
     "XStar".to_string()
 }
 
+/// 给定种子，返回一个随机恒星名称
+/// (内部函数)
 pub fn _random_star_name(seed: i32, star_data: &StarData) -> String {
     let mut rng = DotNet35Random::new(seed);
     let seed2 = rng.next();
