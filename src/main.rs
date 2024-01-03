@@ -1,6 +1,6 @@
-#[allow(unused)]
+// #[allow(unused)]
 mod data_struct;
-#[allow(unused)]
+// #[allow(unused)]
 mod gen;
 
 fn main() {

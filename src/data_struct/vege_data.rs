@@ -1,5 +1,5 @@
 use crate::data_struct::simple_hash::SimpleHash;
-use crate::data_struct::vectors::{VectorLF3, VectorLF4};
+use crate::data_struct::vectors::{Quaternion, VectorF3};
 
 pub struct VegeData {
     pub id: i32,
@@ -8,9 +8,9 @@ pub struct VegeData {
     pub hash: SimpleHash,
     pub hash_address: i32,
     pub combat_stat_id: i32,
-    pub pos: VectorLF3,
-    pub rot: VectorLF4,
-    pub scl: VectorLF3,
+    pub pos: VectorF3,
+    pub rot: Quaternion,
+    pub scl: VectorF3,
     pub model_id: i32,
     pub collider_id: i32,
 }
@@ -24,9 +24,9 @@ impl VegeData {
             hash: SimpleHash::new(),
             hash_address: 0,
             combat_stat_id: 0,
-            pos: VectorLF3::zero(),
-            rot: VectorLF4::zero(),
-            scl: VectorLF3::zero(),
+            pos: VectorF3::zero(),
+            rot: Quaternion::zero(),
+            scl: VectorF3::zero(),
             model_id: 0,
             collider_id: 0,
         }

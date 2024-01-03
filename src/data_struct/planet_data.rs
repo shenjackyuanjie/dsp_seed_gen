@@ -4,9 +4,7 @@ use std::rc::Rc;
 use crate::data_struct::enums::{EPlanetSingularity, EPlanetType};
 use crate::data_struct::galaxy_data::GalaxyData;
 use crate::data_struct::star_data::StarData;
-use crate::data_struct::vectors::{VectorLF3, VectorLF4};
-
-use super::galaxy_data;
+use crate::data_struct::vectors::{Quaternion, VectorLF3};
 
 pub const K_ENTER_ALTITUDE: f32 = 1000.0;
 pub const K_BIRTH_HEIGHT_SHIFT: f32 = 1.45;
@@ -96,14 +94,14 @@ pub struct PlanetData {
     pub runtime_position: VectorLF3,
     /// 下一个运行时位置
     pub runtime_position_next: VectorLF3,
-    /// 运行时旋转（转换为VectorLF4）
-    pub runtime_rotation: VectorLF4,
-    /// 下一个运行时旋转（转换为VectorLF4）
-    pub runtime_rotation_next: VectorLF4,
-    /// 运行时系统旋转（转换为VectorLF4）
-    pub runtime_system_rotation: VectorLF4,
-    /// 运行时轨道旋转（转换为VectorLF4）
-    pub runtime_orbit_rotation: VectorLF4,
+    /// 运行时旋转
+    pub runtime_rotation: Quaternion,
+    /// 下一个运行时旋转
+    pub runtime_rotation_next: Quaternion,
+    /// 运行时系统旋转
+    pub runtime_system_rotation: Quaternion,
+    /// 运行时轨道旋转
+    pub runtime_orbit_rotation: Quaternion,
     /// 运行时轨道相位
     pub runtime_orbit_phase: f32,
     /// 运行时旋转相位
@@ -176,10 +174,10 @@ impl PlanetData {
             orbit_around_planet: None,
             runtime_position: VectorLF3::zero(),
             runtime_position_next: VectorLF3::zero(),
-            runtime_rotation: VectorLF4::zero(),
-            runtime_rotation_next: VectorLF4::zero(),
-            runtime_system_rotation: VectorLF4::zero(),
-            runtime_orbit_rotation: VectorLF4::zero(),
+            runtime_rotation: Quaternion::zero(),
+            runtime_rotation_next: Quaternion::zero(),
+            runtime_system_rotation: Quaternion::zero(),
+            runtime_orbit_rotation: Quaternion::zero(),
             runtime_orbit_phase: 0.0,
             runtime_rotation_phase: 0.0,
             u_position: VectorLF3::zero(),

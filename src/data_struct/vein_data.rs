@@ -1,5 +1,5 @@
 use crate::data_struct::enums::EVeinType;
-use crate::data_struct::vectors::VectorLF3;
+use crate::data_struct::vectors::VectorF3;
 
 pub static OIL_SPEED_MULTIPLIER: f32 = 4E-05;
 
@@ -10,7 +10,7 @@ pub struct VeinData {
     pub group_index: i16,
     pub amount: i32,
     pub product_id: i32,
-    pub pos: VectorLF3,
+    pub pos: VectorF3,
     pub combat_stat_id: i32,
     pub miner_count: i32,
     pub miner_id0: i32,
@@ -36,7 +36,7 @@ impl VeinData {
             group_index: 0,
             amount: 0,
             product_id: 0,
-            pos: VectorLF3::zero(),
+            pos: VectorF3::zero(),
             combat_stat_id: 0,
             miner_count: 0,
             miner_id0: 0,

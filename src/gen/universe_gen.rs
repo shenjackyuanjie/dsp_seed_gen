@@ -70,9 +70,10 @@ pub fn create_galaxy(game: GameDesc) -> GalaxyData {
             } else if i >= num12 {
                 need_type = EStarType::WhiteDwarf;
             }
-            // galaxy_data.stars[i] = StarGen::create_star(&galaxy_data, &tmp_poses[i], &game, i + 1, seed, need_type, need_spectr);
+            // galaxy_data.stars[i] = star_gen::create_star(&galaxy_data, &tmp_poses[i], &game, i + 1, seed, need_type, need_spectr);
         }
     }
+    // TODO: 生成行星
     todo!()
 }
 

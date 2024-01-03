@@ -32,6 +32,11 @@ pub struct VectorF4 {
     pub vec: Vector4<f32>,
 }
 
+/// 四元数
+/// 用于旋转
+/// 只是一个别名而已(￣▽￣)"
+pub type Quaternion = VectorF4;
+
 macro_rules! short_impl {
     ($vec_type: ty, $f_type: ty) => {
         pub fn zero() -> Self {
