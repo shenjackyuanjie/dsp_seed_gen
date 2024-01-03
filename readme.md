@@ -7,6 +7,10 @@
 这个项目是在看到 [B站 专栏](https://www.bilibili.com/read/cv27943623/) 和 [视频](https://www.bilibili.com/video/BV1oC4y117n4/)
 之后收到启发，决定把它 written in rust
 
+## 进度
+
+[TODO](todo.md)
+
 ## 感谢
 
 - [B站 专栏](https://www.bilibili.com/read/cv27943623/)
@@ -21,3 +25,4 @@
 ### [戴森球计划制作组](https://space.bilibili.com/481714350)
 
 制作了这么好的游戏给大家玩
+
