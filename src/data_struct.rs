@@ -6,9 +6,14 @@ pub mod star_data;
 pub mod vege_data;
 pub mod vein_data;
 
+#[allow(unused)]
 pub mod combat_setting;
 pub mod game_desc;
 pub mod vectors;
 
+#[allow(unused)]
+pub mod consts;
+#[allow(unused)]
 pub mod enums;
+#[allow(unused)]
 pub mod simple_hash;

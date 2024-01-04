@@ -44,6 +44,9 @@ macro_rules! short_impl {
                 vec: <$vec_type>::zeros(),
             }
         }
+        pub fn dot(&self, rhs: Self) -> $f_type {
+            self.vec.dot(&rhs.vec)
+        }
         pub fn magnitude(&self) -> $f_type {
             self.vec.norm()
         }
@@ -186,4 +189,68 @@ impl VectorF4 {
             vec: Vector4::new(x, y, z, w),
         }
     }
+}
+
+#[test]
+fn create_vector() {
+    let v1 = VectorLF2::new(1.0, 2.0);
+    let v2 = VectorLF3::new(1.0, 2.0, 3.0);
+    let v3 = VectorLF4::new(1.0, 2.0, 3.0, 4.0);
+    let v4 = VectorF2::new(1.0, 2.0);
+    let v5 = VectorF3::new(1.0, 2.0, 3.0);
+    let v6 = VectorF4::new(1.0, 2.0, 3.0, 4.0);
+    assert_eq!(v1.vec, Vector2::new(1.0, 2.0));
+    assert_eq!(v2.vec, Vector3::new(1.0, 2.0, 3.0));
+    assert_eq!(v3.vec, Vector4::new(1.0, 2.0, 3.0, 4.0));
+    assert_eq!(v4.vec, Vector2::new(1.0, 2.0));
+    assert_eq!(v5.vec, Vector3::new(1.0, 2.0, 3.0));
+    assert_eq!(v6.vec, Vector4::new(1.0, 2.0, 3.0, 4.0));
+}
+
+#[test]
+fn dot() {
+    let v1 = VectorLF2::new(1.0, 2.0);
+    let v2 = VectorLF3::new(1.0, 2.0, 3.0);
+    let v3 = VectorLF4::new(1.0, 2.0, 3.0, 4.0);
+    let v4 = VectorF2::new(1.0, 2.0);
+    let v5 = VectorF3::new(1.0, 2.0, 3.0);
+    let v6 = VectorF4::new(1.0, 2.0, 3.0, 4.0);
+    assert_eq!(v1.dot(v1), 5.0);
+    assert_eq!(v2.dot(v2), 14.0);
+    assert_eq!(v3.dot(v3), 30.0);
+    assert_eq!(v4.dot(v4), 5.0);
+    assert_eq!(v5.dot(v5), 14.0);
+    assert_eq!(v6.dot(v6), 30.0);
+}
+
+#[test]
+fn zero() {
+    let v1 = VectorLF2::zero();
+    let v2 = VectorLF3::zero();
+    let v3 = VectorLF4::zero();
+    let v4 = VectorF2::zero();
+    let v5 = VectorF3::zero();
+    let v6 = VectorF4::zero();
+    assert_eq!(v1.vec, Vector2::new(0.0, 0.0));
+    assert_eq!(v2.vec, Vector3::new(0.0, 0.0, 0.0));
+    assert_eq!(v3.vec, Vector4::new(0.0, 0.0, 0.0, 0.0));
+    assert_eq!(v4.vec, Vector2::new(0.0, 0.0));
+    assert_eq!(v5.vec, Vector3::new(0.0, 0.0, 0.0));
+    assert_eq!(v6.vec, Vector4::new(0.0, 0.0, 0.0, 0.0));
+}
+
+#[test]
+fn magnitude() {
+    let v1 = VectorLF2::new(1.0, 2.0);
+    let v2 = VectorLF3::new(1.0, 2.0, 3.0);
+    let v3 = VectorLF4::new(1.0, 2.0, 3.0, 4.0);
+    let v4 = VectorF2::new(1.0, 2.0);
+    let v5 = VectorF3::new(1.0, 2.0, 3.0);
+    let v6 = VectorF4::new(1.0, 2.0, 3.0, 4.0);
+    assert_eq!(v1.magnitude(), 2.23606797749979);
+    assert_eq!(v2.magnitude(), 3.7416573867739413);
+    assert_eq!(v3.magnitude(), 5.477225575051661);
+    assert_eq!(v4.magnitude(), 2.23606797749979);
+    assert_eq!(v5.magnitude(), 3.7416573867739413);
+    assert_eq!(v6.magnitude(), 5.477225575051661);
 }
