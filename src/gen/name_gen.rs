@@ -41,6 +41,7 @@ pub fn random_name(seed: i32) -> String {
 }
 
 /// 给定种子，返回一个随机恒星名称
+#[allow(unused)]
 pub fn random_star_name(seed: i32, star_data: &StarData, galaxy: &GalaxyData) -> String {
     let mut rng = DotNet35Random::new(seed);
     for _ in 0..256 {
@@ -213,6 +214,7 @@ pub static ENDING: [&str; 18] = [
     "eon", "y",
 ];
 
+#[allow(unused)]
 pub static ROMAN: [&str; 21] = [
     "", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV",
     "XV", "XVI", "XVII", "XVIII", "XIX", "XX",
