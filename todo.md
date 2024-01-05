@@ -33,10 +33,15 @@
 
 - [ ] [`planet_data`](src/data_struct/planet_data.rs)
   - [ ] 完善成员
+
 - [ ] [`planet_raw_data`](src/data_struct/planet_raw_data.rs)
   - [ ] 完善方法
 
 - [ ] [`star_data`](src/data_struct/star_data.rs)
+
+- [ ] [`vein_data`](src/data_struct/vein_data.rs)
+
+- [x] [`vein_group`](src/data_struct/vein_group.rs)
 
 ## 生成
 

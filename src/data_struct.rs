@@ -5,6 +5,7 @@ pub mod star_data;
 
 pub mod vege_data;
 pub mod vein_data;
+pub mod vein_group;
 
 pub mod combat_setting;
 pub mod game_desc;
