@@ -3,10 +3,10 @@ use std::rc::Rc;
 
 // use dotnet35_rand_rs::DotNet35Random;
 
+use crate::data_struct::consts::{GRAVITY, PI};
 use crate::data_struct::galaxy_data::GalaxyData;
 use crate::data_struct::planet_data::PlanetData;
 use crate::data_struct::star_data::StarData;
-use crate::data_struct::consts::{GRAVITY, PI};
 
 pub const K_GRAVITATIONAL_CONST: f64 = 346586930.95732176;
 pub const K_PLANET_MASS: f32 = 0.006;

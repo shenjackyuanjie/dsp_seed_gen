@@ -6,7 +6,6 @@ pub mod star_data;
 pub mod vege_data;
 pub mod vein_data;
 
-#[allow(unused)]
 pub mod combat_setting;
 pub mod game_desc;
 pub mod vectors;

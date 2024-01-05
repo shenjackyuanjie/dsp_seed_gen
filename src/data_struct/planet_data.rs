@@ -3,8 +3,9 @@ use std::rc::Rc;
 
 use crate::data_struct::enums::{EPlanetSingularity, EPlanetType};
 use crate::data_struct::galaxy_data::GalaxyData;
+use crate::data_struct::planet_raw_data::PlanetRawData;
 use crate::data_struct::star_data::StarData;
-use crate::data_struct::vectors::{Quaternion, VectorLF3};
+use crate::data_struct::vectors::{Quaternion, VectorF3, VectorLF3};
 
 pub const K_ENTER_ALTITUDE: f32 = 1000.0;
 pub const K_BIRTH_HEIGHT_SHIFT: f32 = 1.45;
@@ -111,7 +112,7 @@ pub struct PlanetData {
     /// 下一个U位置
     pub u_position_next: VectorLF3,
     /// 运行时本地太阳方向
-    pub runtime_local_sun_direction: VectorLF3,
+    pub runtime_local_sun_direction: VectorF3,
     /// 模型数据
     // pub mod_data: Vec<u8>,
     /// 精度
@@ -119,13 +120,13 @@ pub struct PlanetData {
     /// 段
     pub segment: i32,
     /// 数据
-    // pub data: PlanetRawData,
+    pub data: PlanetRawData,
     /// 矿物组锁
     // pub vein_groups_lock: Mutex,
     /// 矿物组
     // pub vein_groups: Vec<VeinGroup>,
     /// 矿物偏向向量
-    pub vein_bias_vector: VectorLF3,
+    pub vein_bias_vector: VectorF3,
     // ... 其他字段
     // TODO
 }
@@ -183,11 +184,12 @@ impl PlanetData {
             runtime_rotation_phase: 0.0,
             u_position: VectorLF3::zero(),
             u_position_next: VectorLF3::zero(),
-            runtime_local_sun_direction: VectorLF3::zero(),
+            runtime_local_sun_direction: VectorF3::zero(),
             // mod_data: vec![],
             precision: 160,
             segment: 5,
-            vein_bias_vector: VectorLF3::zero(),
+            data: PlanetRawData::new(),
+            vein_bias_vector: VectorF3::zero(),
         }
     }
 }

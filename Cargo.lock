@@ -31,9 +31,9 @@ checksum = "374d28ec25809ee0e23827c2ab573d729e293f281dfe393500e7ad618baa61c6"
 
 [[package]]
 name = "dotnet35_rand_rs"
-version = "0.1.4"
+version = "0.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c427a2b553418a78ef758fdfacde2222235f166183a9a577345ab2f94ac2fd3c"
+checksum = "720da0231adec2f01f6a8eebee97e540a9eec5dc7d06c95a8ca85f0258c49f20"
 
 [[package]]
 name = "dsp_world_gen"
