@@ -37,8 +37,15 @@ pub struct VectorF4 {
 /// 只是一个别名而已(￣▽￣)"
 pub type Quaternion = VectorF4;
 
+/// RGBA颜色
+/// 四个通道分别为R, G, B, A
+pub type Color = VectorF4;
+
 macro_rules! short_impl {
     ($vec_type: ty, $f_type: ty) => {
+        pub fn from_vec(vec: $vec_type) -> Self {
+            Self { vec }
+        }
         pub fn zero() -> Self {
             Self {
                 vec: <$vec_type>::zeros(),
@@ -68,6 +75,10 @@ macro_rules! short_impl {
                 return target.to_owned();
             }
             Self::zero() + delta / magnitude * max_distance_delta
+        }
+        pub fn is_parallel_to(&self, rhs: Self) -> bool {
+            let cross_product = self.vec.cross(&rhs.vec);
+            cross_product.magnitude() < 1e-6
         }
     };
 }
@@ -146,11 +157,27 @@ impl VectorLF2 {
     }
 }
 
+impl Into<VectorF2> for VectorLF2 {
+    fn into(self) -> VectorF2 {
+        VectorF2 {
+            vec: self.vec.cast(),
+        }
+    }
+}
+
 impl VectorLF3 {
     short_impl!(Vector3<f64>, f64);
     pub fn new(x: f64, y: f64, z: f64) -> Self {
         Self {
             vec: Vector3::new(x, y, z),
+        }
+    }
+}
+
+impl Into<VectorF3> for VectorLF3 {
+    fn into(self) -> VectorF3 {
+        VectorF3 {
+            vec: self.vec.cast(),
         }
     }
 }
@@ -164,11 +191,27 @@ impl VectorLF4 {
     }
 }
 
+impl Into<VectorF4> for VectorLF4 {
+    fn into(self) -> VectorF4 {
+        VectorF4 {
+            vec: self.vec.cast(),
+        }
+    }
+}
+
 impl VectorF2 {
     short_impl!(Vector2<f32>, f32);
     pub fn new(x: f32, y: f32) -> Self {
         Self {
             vec: Vector2::new(x, y),
+        }
+    }
+}
+
+impl Into<VectorLF2> for VectorF2 {
+    fn into(self) -> VectorLF2 {
+        VectorLF2 {
+            vec: self.vec.cast(),
         }
     }
 }
@@ -182,6 +225,14 @@ impl VectorF3 {
     }
 }
 
+impl Into<VectorLF3> for VectorF3 {
+    fn into(self) -> VectorLF3 {
+        VectorLF3 {
+            vec: self.vec.cast(),
+        }
+    }
+}
+
 impl VectorF4 {
     short_impl!(Vector4<f32>, f32);
     pub fn new(x: f32, y: f32, z: f32, w: f32) -> Self {
@@ -190,6 +241,88 @@ impl VectorF4 {
         }
     }
 }
+
+impl Into<VectorLF4> for VectorF4 {
+    fn into(self) -> VectorLF4 {
+        VectorLF4 {
+            vec: self.vec.cast(),
+        }
+    }
+}
+
+impl Quaternion {
+    pub fn q_rotate_lf(&self, v: VectorLF3) -> VectorLF3 {
+        let v = (v * 2.0).vec;
+        let adjust_factor = (self.vec.w * self.vec.w - 0.5) as f64;
+        let f_vec: VectorLF4 = self.clone().into();
+        let f_vec = f_vec.vec;
+        let dot = f_vec.x * v.x + f_vec.y * v.y + f_vec.z * v.z;
+        VectorLF3::new(
+            v.x * adjust_factor + (f_vec.y * v.z - f_vec.z * v.y) * f_vec.w + f_vec.x * dot,
+            v.y * adjust_factor + (f_vec.z * v.x - f_vec.x * v.z) * f_vec.w + f_vec.y * dot,
+            v.z * adjust_factor + (f_vec.x * v.y - f_vec.y * v.x) * f_vec.w + f_vec.z * dot,
+        )
+    }
+    pub fn look_rotation(forward: VectorLF3, up: VectorLF3) -> Quaternion {
+        if forward.magnitude() == 0.0 || up.magnitude() == 0.0 || forward.is_parallel_to(up) {
+            return Quaternion::new( 0.0, 0.0, 0.0, 1.0 );
+        }
+
+        let forward = forward.vec.normalize();
+        let right = up.vec.cross(&forward).normalize();
+        let up = forward.cross(&right);
+
+        let m00 = right.x;
+        let m01 = right.y;
+        let m02 = right.z;
+        let m10 = up.x;
+        let m11 = up.y;
+        let m12 = up.z;
+        let m20 = forward.x;
+        let m21 = forward.y;
+        let m22 = forward.z;
+
+        let num8 = (m00 + m11) + m22;
+        let mut quaternion = Quaternion::zero();
+
+        if num8 > 0.0 {
+            let num = (num8 + 1.0).sqrt();
+            quaternion.vec.w = (num * 0.5) as f32;
+            let num2 = 0.5 / num;
+            quaternion.vec.x = ((m12 - m21) * num2) as f32;
+            quaternion.vec.y = ((m20 - m02) * num2) as f32;
+            quaternion.vec.z = ((m01 - m10) * num2) as f32;
+            return quaternion;
+        }
+        if (m00 >= m11) && (m00 >= m22) {
+            let num7 = (((1.0 + m00) - m11) - m22).sqrt();
+            let num4 = 0.5 / num7;
+            quaternion.vec.x = (0.5 * num7) as f32;
+            quaternion.vec.y = ((m01 + m10) * num4) as f32;
+            quaternion.vec.z = ((m02 + m20) * num4) as f32;
+            quaternion.vec.w = ((m12 - m21) * num4) as f32;
+            return quaternion;
+        }
+        if m11 > m22 {
+            let num6 = (((1.0 + m11) - m00) - m22).sqrt();
+            let num3 = 0.5 / num6;
+            quaternion.vec.x = ((m01 + m10) * num3) as f32;
+            quaternion.vec.y = (0.5 * num6) as f32;
+            quaternion.vec.z = ((m12 + m21) * num3) as f32;
+            quaternion.vec.w = ((m02 - m20) * num3) as f32;
+            return quaternion; 
+        }
+        let num5 = (((1.0 + m22) - m00) - m11).sqrt();
+        let num2 = 0.5 / num5;
+        quaternion.vec.x = ((m02 - m20) * num2) as f32;
+        quaternion.vec.y = ((m12 - m21) * num2) as f32;
+        quaternion.vec.z = (0.5 * num5) as f32;
+        quaternion.vec.w = ((m01 + m10) * num2) as f32;
+        quaternion
+    }
+}
+
+
 
 #[test]
 fn create_vector() {

@@ -5,6 +5,7 @@
 - [x] Vectors
   - [x] `VectorLF 2/3/4` (`Vector<f64>`)
   - [x] `Vector 2/3/4` (`Vector<f32>`)
+  - [x] `Quaternion` (就是 `VectorF4` )
 
 - [ ] Enums
   - [x] `EPlanetType`
@@ -49,12 +50,15 @@
   - [ ] `universe_gen::create_galaxy`
   - [x] `universe_gen::random_poses`
   - [x] `universe_gen::generate_temp_poses`
+
 - [ ] [星系生成](src/gen/star_gen.rs)
   - [x] `star_gen::create_birth_star`
   - [ ] `star_gen::create_star`
   - [x] `star_gen::set_star_age`
+
 - [ ] [星球生成](src/gen/planet_gen.rs)
   - [ ] [星球生成算法](src/gen/planet_algorithm.rs)
     - [ ] [0~14](src/gen/planet_algorithm)
     - [ ] [生成参数](src/gen/planet_algorithm)
+
 - [x] [名称生成](src/gen/name_gen.rs)
