@@ -67,7 +67,7 @@ pub fn create_birth_star(
     let seed3 = rng.next();
     star_data.name = name_gen::random_name(seed2);
     // star_data.override_name = "".to_string();
-    // starData.position = VectorLF3.zero;
+    // starData.position = VectorLF3.zeros;
     let mut rng2 = DotNet35Random::new(seed3);
     let r = rng2.next_double();
     let r2 = rng2.next_double();
@@ -136,7 +136,7 @@ pub fn create_birth_star(
     if star_data.dyson_radius * 40000.0 < star_data.physics_radius() * 1.5 {
         star_data.dyson_radius = star_data.physics_radius() * 1.5 / 40000.0;
     }
-    star_data.u_position = VectorLF3::zero();
+    star_data.u_position = VectorLF3::zeros();
     star_data.name = name_gen::random_star_name(seed2, &star_data, &galaxy_data.borrow());
     star_data.override_name = String::from("");
     star_data.hive_pattern_level = 0;

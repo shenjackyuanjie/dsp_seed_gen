@@ -24,9 +24,9 @@ impl VegeData {
             hash: SimpleHash::new(),
             hash_address: 0,
             combat_stat_id: 0,
-            pos: VectorF3::zero(),
-            rot: Quaternion::zero(),
-            scl: VectorF3::zero(),
+            pos: VectorF3::zeros(),
+            rot: Quaternion::zeros(),
+            scl: VectorF3::zeros(),
             model_id: 0,
             collider_id: 0,
         }

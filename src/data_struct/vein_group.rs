@@ -16,7 +16,7 @@ impl VeinGroup {
     pub fn new(vein_type: EVeinType) -> Self {
         Self {
             vein_type,
-            pos: VectorF3::zero(),
+            pos: VectorF3::zeros(),
             count: 0,
             amount: 0,
         }

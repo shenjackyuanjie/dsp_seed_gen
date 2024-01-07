@@ -6,7 +6,7 @@ use dotnet35_rand_rs::DotNet35Random;
 use crate::data_struct::enums::{ESpectrType, EStarType};
 use crate::data_struct::galaxy_data::GalaxyData;
 use crate::data_struct::game_desc::GameDesc;
-use crate::data_struct::vectors::VectorLF3;
+use crate::data_struct::vectors::{LocalVectors, VectorLF3};
 use crate::gen::star_gen;
 
 pub static ALGO_VERSION: i32 = 20200403;
@@ -133,7 +133,7 @@ pub fn random_poses(
 ) -> TempPos {
     let mut tmp_poses = Vec::new();
     let mut tmp_drunk = Vec::new();
-    tmp_poses.push(VectorLF3::zero());
+    tmp_poses.push(VectorLF3::zeros());
     let mut rand = DotNet35Random::new(seed);
     let random_num = rand.next_double();
     let min_loop_count = 6;

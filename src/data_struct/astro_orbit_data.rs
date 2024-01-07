@@ -1,6 +1,6 @@
-use crate::data_struct::vectors::{Quaternion, VectorLF3};
-// use crate::data_struct::astro_data::AstroData;
+use crate::data_struct::astro_data::AstroData;
 use crate::data_struct::consts::PI;
+use crate::data_struct::vectors::{Quaternion, VectorLF3};
 
 pub struct AstroOrbitData {
     orbit_radius: f32,
@@ -22,14 +22,15 @@ impl AstroOrbitData {
             orbital_period: 0.0,
             orbit_phase: 0.0,
             runtime_orbit_phase: 0.0,
-            orbit_rotation: Quaternion::zero(),
-            orbit_normal: VectorLF3::zero(),
+            orbit_rotation: Quaternion::zeros(),
+            orbit_normal: VectorLF3::zeros(),
         }
     }
 
     pub fn predict_pose(&mut self, time: i64, center: VectorLF3, astro_data: &mut AstroData) {
-        let num = 40000.0 * self.orbit_radius;
-        let mut num2: f64 = time as f64 / (self.orbital_period as f64 * 60.0) + self.orbit_phase as f64 / 360.0;
+        let num = 40000.0 * self.orbit_radius as f64;
+        let mut num2: f64 =
+            time as f64 / (self.orbital_period as f64 * 60.0) + self.orbit_phase as f64 / 360.0;
         let num3 = (num2 + 0.1).floor();
         num2 -= num3;
         self.runtime_orbit_phase = (num2 * 360.0) as f32;

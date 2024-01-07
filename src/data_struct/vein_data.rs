@@ -36,7 +36,7 @@ impl VeinData {
             group_index: 0,
             amount: 0,
             product_id: 0,
-            pos: VectorF3::zero(),
+            pos: VectorF3::zeros(),
             combat_stat_id: 0,
             miner_count: 0,
             miner_id0: 0,

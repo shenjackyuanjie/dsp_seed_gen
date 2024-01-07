@@ -67,7 +67,7 @@ impl PlanetRawData {
     }
 
     pub fn position_hash(&self, v: &VectorF3, corner: Option<i32>) -> i32 {
-        let mut v = v.vec.to_owned();
+        let mut v = v.to_owned();
         let corner = match corner {
             Some(c) => c,
             None => {
