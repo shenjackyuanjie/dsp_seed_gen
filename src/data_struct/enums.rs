@@ -78,3 +78,15 @@ pub enum EVeinType {
     Mag,
     Max,
 }
+
+#[derive(Debug, Clone, Copy)]
+pub enum EAstroType {
+    None,
+    Star,
+    Planet,
+    Asteroid,
+    Fortress = 10,
+    Platform = 15,
+    EnemyHive = 20,
+    Anchor = 30,
+}
