@@ -58,7 +58,7 @@ impl AstroOrbitData {
         let mut vector_lf = u_pos - center;
         let mut quaternion = Quaternion::angle_axis(
             -360.0 / (self.orbital_period * 60.0) as f32,
-            &self.orbit_normal,
+            &self.orbit_normal.cast::<f32>(),
         );
         quaternion.rotation_lf(&vector_lf) - vector_lf
     }

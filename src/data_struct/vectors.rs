@@ -28,7 +28,7 @@ impl LocalQuaternion for Quaternion {
     }
 
     fn angle_axis(angle: f32, axis: &VectorF3) -> Quaternion {
-        let angle_quaternion = UnitQuaternion::from_axis_angle(&Unit::new(axis), angle);
+        let angle_quaternion = UnitQuaternion::from_axis_angle(axis, angle);
         angle_quaternion.as_vector().cast::<f32>()
     }
 
