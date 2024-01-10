@@ -1,5 +1,5 @@
 use crate::data_struct::enums::EAstroType;
-use crate::data_struct::vectors::{LocalVectors, Quaternion, VectorLF3};
+use crate::data_struct::vectors::{Quaternion, VectorLF3};
 
 pub struct AstroData {
     pub id: i32,
