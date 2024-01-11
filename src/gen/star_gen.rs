@@ -14,13 +14,10 @@ pub const E: f64 = 2.7182817;
 pub const GRAVITY: f64 = 1.3538551990520382E-06;
 pub const PI: f64 = 3.141592653589793;
 
-pub static HIVE_ORBIT_RADIUS: [f32; 18] = [
-    0.4, 0.55, 0.7, 0.83, 1.0, 1.2, 1.4, 1.58, 1.72, 1.9, 2.11, 2.29, 2.5, 2.78, 3.02, 3.3, 3.6,
-    3.9,
-];
-pub static ORBIT_RADIUS: [f32; 17] = [
-    0.0, 0.4, 0.7, 1.0, 1.4, 1.9, 2.5, 3.3, 4.3, 5.5, 6.9, 8.4, 10.0, 11.7, 13.5, 15.4, 17.5,
-];
+pub static HIVE_ORBIT_RADIUS: [f32; 18] =
+    [0.4, 0.55, 0.7, 0.83, 1.0, 1.2, 1.4, 1.58, 1.72, 1.9, 2.11, 2.29, 2.5, 2.78, 3.02, 3.3, 3.6, 3.9];
+pub static ORBIT_RADIUS: [f32; 17] =
+    [0.0, 0.4, 0.7, 1.0, 1.4, 1.9, 2.5, 3.3, 4.3, 5.5, 6.9, 8.4, 10.0, 11.7, 13.5, 15.4, 17.5];
 pub static PLANET_2_HIVE_ORBIT_TABEL: [i32; 8] = [0, 0, 2, 4, 6, 9, 12, 15];
 /// public static float specifyBirthStarMass = 0f;
 pub static SPECIFY_BIRTH_STAR_MASS: f32 = 0.0;
@@ -46,15 +43,10 @@ pub type StarGenCondition = ([bool; 18], [f64; 10]);
 /// 返回一个正态分布的随机数
 pub fn rand_normal(average_value: f32, standard_deviation: f32, r1: f64, r2: f64) -> f32 {
     average_value
-        + standard_deviation
-            * ((-2.0 * (1.0 - r1).ln()).sqrt() * (2.0 * std::f64::consts::PI * r2).sin()) as f32
+        + standard_deviation * ((-2.0 * (1.0 - r1).ln()).sqrt() * (2.0 * std::f64::consts::PI * r2).sin()) as f32
 }
 
-pub fn create_birth_star(
-    galaxy_data: Rc<RefCell<GalaxyData>>,
-    game_desc: &GameDesc,
-    seed: i32,
-) -> StarData {
+pub fn create_birth_star(galaxy_data: Rc<RefCell<GalaxyData>>, game_desc: &GameDesc, seed: i32) -> StarData {
     let mut star_data = StarData::new(galaxy_data.clone(), seed);
     // starData.galaxy = galaxy;
     // starData.index = 0;
@@ -100,13 +92,11 @@ pub fn create_birth_star(
     }
     let mass_factor = (1.0 - star_data.age.min(1.0).powf(20.0) * 0.5) * star_data.mass;
 
-    star_data.temperature = ((mass_factor as f64)
-        .powf(0.56 + 0.14 / ((mass_factor + 4.0) as f64).log10() / 5.0_f64.log10())
-        * 4450.0
-        + 1300.0) as f32;
+    star_data.temperature =
+        ((mass_factor as f64).powf(0.56 + 0.14 / ((mass_factor + 4.0) as f64).log10() / 5.0_f64.log10()) * 4450.0
+            + 1300.0) as f32;
 
-    let mut temperature_factor =
-        ((star_data.temperature as f64 - 1300.0) / 4500.0).log10() / 2.6_f64.log10() - 0.5;
+    let mut temperature_factor = ((star_data.temperature as f64 - 1300.0) / 4500.0).log10() / 2.6_f64.log10() - 0.5;
     if temperature_factor < 0.0 {
         temperature_factor *= 4.0;
     }
@@ -142,10 +132,8 @@ pub fn create_birth_star(
     star_data.hive_pattern_level = 0;
     star_data.safety_factor = 0.847 + safety_factor as f32 * 0.026;
     let hive_count_adjustment_factor = rng3.next_with_max(1000);
-    star_data.max_hive_count = ((game_desc.combat_settings.max_density * 1000.0
-        + hive_count_adjustment_factor as f32
-        + 0.5)
-        / 1000.0) as i32;
+    star_data.max_hive_count =
+        ((game_desc.combat_settings.max_density * 1000.0 + hive_count_adjustment_factor as f32 + 0.5) / 1000.0) as i32;
     let initial_colonize = game_desc.combat_settings.initial_colonize;
     let colonize_check_result = if (initial_colonize * star_data.max_hive_count as f32) < 0.7 {
         0
@@ -169,9 +157,7 @@ pub fn create_birth_star(
             star_data.initial_hive_count =
                 (rand_normal(base_initial_hive_count, standard_deviation, r3, r4) + 0.5) as i32;
             i -= 1;
-            if i <= 0
-                || (star_data.initial_hive_count >= 0
-                    && star_data.initial_hive_count <= star_data.max_hive_count)
+            if i <= 0 || (star_data.initial_hive_count >= 0 && star_data.initial_hive_count <= star_data.max_hive_count)
             {
                 break;
             }
@@ -192,8 +178,7 @@ pub fn set_star_age(star: &mut StarData, age: f32, rn: f64, rt: f64) {
     star.age = age;
     if age < 1.0 {
         if age >= 0.96 {
-            let mut radius_factor =
-                (5.0f64.powf((star.mass.log10() - 0.7).abs() as f64) * 5.0) as f32;
+            let mut radius_factor = (5.0f64.powf((star.mass.log10() - 0.7).abs() as f64) * 5.0) as f32;
             if radius_factor > 10.0 {
                 radius_factor = (radius_factor * 0.1).log10() + 1.0 * 10.0;
             }

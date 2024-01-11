@@ -153,8 +153,7 @@ pub fn random_giant_star_name_with_format(seed: i32) -> String {
     }
 }
 
-pub static NEUTRON_STAR_NAME_FORMATS: [&str; 2] =
-    ["NTR J{:02}{:02}+{:02}", "NTR J{:02}{:02}-{:02}"];
+pub static NEUTRON_STAR_NAME_FORMATS: [&str; 2] = ["NTR J{:02}{:02}+{:02}", "NTR J{:02}{:02}-{:02}"];
 
 pub fn random_neutron_star_name_with_format(seed: i32) -> String {
     let mut rng = DotNet35Random::new(seed);
@@ -163,13 +162,7 @@ pub fn random_neutron_star_name_with_format(seed: i32) -> String {
     let num3 = rng.next_with_max(60);
     let num4 = rng.next_with_max(60);
     // format!(format_template, num2, num3, num4)
-    format!(
-        "NTR J{:02}{:02}{}{:02}",
-        num2,
-        num3,
-        if index == 0 { '+' } else { '-' },
-        num4
-    )
+    format!("NTR J{:02}{:02}{}{:02}", num2, num3, if index == 0 { '+' } else { '-' }, num4)
 }
 
 pub static BLACK_HOLE_NAME_FORMATS: [&str; 2] = ["DSR J{:02}{:02}+{:02}", "DSR J{:02}{:02}-{:02}"];
@@ -180,44 +173,34 @@ pub fn random_black_hole_name_with_format(seed: i32) -> String {
     let num3 = rng.next_with_max(60);
     let num4 = rng.next_with_max(60);
     // format!(black_hole_name_formats!(index), num2, num3, num4)
-    format!(
-        "DSR J{:02}{:02}{}{:02}",
-        num2,
-        num3,
-        if index == 0 { '+' } else { '-' },
-        num4
-    )
+    format!("DSR J{:02}{:02}{}{:02}", num2, num3, if index == 0 { '+' } else { '-' }, num4)
 }
 
 pub static CON0: [&str; 39] = [
-    "p", "t", "c", "k", "b", "d", "g", "f", "ph", "s", "sh", "th", "h", "v", "z", "th", "r", "ch",
-    "tr", "dr", "m", "n", "l", "y", "w", "sp", "st", "sk", "sc", "sl", "pl", "cl", "bl", "gl",
-    "fr", "fl", "pr", "br", "cr",
+    "p", "t", "c", "k", "b", "d", "g", "f", "ph", "s", "sh", "th", "h", "v", "z", "th", "r", "ch", "tr", "dr", "m",
+    "n", "l", "y", "w", "sp", "st", "sk", "sc", "sl", "pl", "cl", "bl", "gl", "fr", "fl", "pr", "br", "cr",
 ];
 
-pub static CON1: [&str; 16] = [
-    "thr", "ex", "ec", "el", "er", "ev", "il", "is", "it", "ir", "up", "ut", "ur", "un", "gt",
-    "phr",
-];
+pub static CON1: [&str; 16] =
+    ["thr", "ex", "ec", "el", "er", "ev", "il", "is", "it", "ir", "up", "ut", "ur", "un", "gt", "phr"];
 
 pub static VOW0: [&str; 7] = ["a", "an", "am", "al", "o", "u", "xe"];
 
 pub static VOW1: [&str; 23] = [
-    "ea", "ee", "ie", "i", "e", "a", "er", "a", "u", "oo", "u", "or", "o", "oa", "ar", "a", "ei",
-    "ai", "i", "au", "ou", "ao", "ir",
+    "ea", "ee", "ie", "i", "e", "a", "er", "a", "u", "oo", "u", "or", "o", "oa", "ar", "a", "ei", "ai", "i", "au",
+    "ou", "ao", "ir",
 ];
 
 pub static VOW2: [&str; 7] = ["y", "oi", "io", "iur", "ur", "ac", "ic"];
 
 pub static ENDING: [&str; 18] = [
-    "er", "n", "un", "or", "ar", "o", "o", "ans", "us", "ix", "us", "iurs", "a", "eo", "urn", "es",
-    "eon", "y",
+    "er", "n", "un", "or", "ar", "o", "o", "ans", "us", "ix", "us", "iurs", "a", "eo", "urn", "es", "eon", "y",
 ];
 
 #[allow(unused)]
 pub static ROMAN: [&str; 21] = [
-    "", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV",
-    "XV", "XVI", "XVII", "XVIII", "XIX", "XX",
+    "", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV", "XVI", "XVII",
+    "XVIII", "XIX", "XX",
 ];
 
 pub static CONSTELLATIONS: [&str; 88] = [
@@ -311,9 +294,8 @@ pub static CONSTELLATIONS: [&str; 88] = [
     "Vulpeculae",
 ];
 
-pub static ALPHABETA: [&str; 11] = [
-    "Alpha", "Beta", "Gamma", "Delta", "Epsilon", "Zeta", "Eta", "Theta", "Iota", "Kappa", "Lambda",
-];
+pub static ALPHABETA: [&str; 11] =
+    ["Alpha", "Beta", "Gamma", "Delta", "Epsilon", "Zeta", "Eta", "Theta", "Iota", "Kappa", "Lambda"];
 
 pub static ALPHABETA_LETTER: [&str; 11] = ["α", "β", "γ", "δ", "ε", "ζ", "η", "θ", "ι", "κ", "λ"];
 

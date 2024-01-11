@@ -25,24 +25,35 @@ impl AstroData {
             u_pos_next: VectorLF3::zeros(),
         }
     }
-    pub fn position_u(&self, lpos: &mut VectorLF3) -> () {
-        let num = 2.0 * lpos.x;
-        let num2 = 2.0 * lpos.y;
-        let num3 = 2.0 * lpos.z;
+    pub fn position_u_l(&self, upos: &mut VectorLF3) -> () {
+        let num = 2.0 * upos.x;
+        let num2 = 2.0 * upos.y;
+        let num3 = 2.0 * upos.z;
         let num4 = (self.u_rot.w * self.u_rot.w) as f64 - 0.5;
-        let num5 =
-            self.u_rot.x as f64 * num + self.u_rot.y as f64 * num2 + self.u_rot.z as f64 * num3;
-        lpos.x = num * num4
-            + (self.u_rot.y as f64 * num3 - self.u_rot.z as f64 * num2) * self.u_rot.w as f64
-            + self.u_rot.x as f64 * num5
-            + self.u_pos.x as f64;
-        lpos.y = num2 * num4
-            + (self.u_rot.z as f64 * num - self.u_rot.x as f64 * num3) * self.u_rot.w as f64
-            + self.u_rot.y as f64 * num5
-            + self.u_pos.y as f64;
-        lpos.z = num3 * num4
-            + (self.u_rot.x as f64 * num2 - self.u_rot.y as f64 * num) * self.u_rot.w as f64
-            + self.u_rot.z as f64 * num5
-            + self.u_pos.z as f64;
+        let u_rot = self.u_rot.cast::<f64>();
+        let num5 = u_rot.x * num + u_rot.y * num2 + u_rot.z * num3;
+        upos.x = num * num4 + (u_rot.y * num3 - u_rot.z * num2) * u_rot.w + u_rot.x * num5 + self.u_pos.x as f64;
+        upos.y = num2 * num4 + (u_rot.z * num - u_rot.x * num3) * u_rot.w + u_rot.y * num5 + self.u_pos.y as f64;
+        upos.z = num3 * num4 + (u_rot.x * num2 - u_rot.y * num) * u_rot.w + u_rot.z * num5 + self.u_pos.z as f64;
+    }
+    pub fn position_u_f(&self, upos: &mut VectorLF3) -> () {
+        let num = 2.0 * upos.x as f32;
+        let num2 = 2.0 * upos.y as f32;
+        let num3 = 2.0 * upos.z as f32;
+        let num4 = ((self.u_rot.w * self.u_rot.w) as f64 - 0.5) as f32;
+        let num5 = self.u_rot.x * num + self.u_rot.y * num2 + self.u_rot.z * num3;
+        let u_rot = self.u_rot.cast::<f64>();
+        upos.x = (num * num4
+            + (self.u_rot.y * num3 - self.u_rot.z * num2) * self.u_rot.w
+            + self.u_rot.x * num5
+            + self.u_pos.x as f32) as f64;
+        upos.y = (num2 * num4
+            + (self.u_rot.z * num - self.u_rot.x * num3) * self.u_rot.w
+            + self.u_rot.y * num5
+            + self.u_pos.y as f32) as f64;
+        upos.z = (num3 * num4
+            + (self.u_rot.x * num2 - self.u_rot.y * num) * self.u_rot.w
+            + self.u_rot.z * num5
+            + self.u_pos.z as f32) as f64;
     }
 }

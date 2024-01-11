@@ -20,14 +20,9 @@ pub fn create_galaxy(game: GameDesc) -> GalaxyData {
         panic!("Invalid galaxy algorithm version: {}", game.galaxy_algo);
     }
     // TODO: PlanetGen.gasCoef = (gameDesc.isRareResource ? 0.8f : 1f);
-    let _gas_conf = if game.is_rare_resource() {
-        0.8f32
-    } else {
-        1f32
-    };
+    let _gas_conf = if game.is_rare_resource() { 0.8f32 } else { 1f32 };
     let mut rand = DotNet35Random::new(game.galaxy_seed);
-    let (tmp_poses, tmp_drunk) =
-        generate_temp_poses(rand.next(), game.star_count, 4, 2.0, 2.3, 3.5, 0.18);
+    let (tmp_poses, tmp_drunk) = generate_temp_poses(rand.next(), game.star_count, 4, 2.0, 2.3, 3.5, 0.18);
     let num = tmp_poses.len() as i32;
     let mut galaxy_data = GalaxyData::new(game.galaxy_seed, game.star_count);
     if tmp_poses.len() <= 0 {
@@ -50,8 +45,7 @@ pub fn create_galaxy(game: GameDesc) -> GalaxyData {
     for i in 0..num {
         let seed = rand.next();
         if i == 0 {
-            galaxy_data.borrow_mut().stars[i as usize] =
-                star_gen::create_birth_star(galaxy_data.clone(), &game, seed);
+            galaxy_data.borrow_mut().stars[i as usize] = star_gen::create_birth_star(galaxy_data.clone(), &game, seed);
         } else {
             let mut need_spectr = ESpectrType::X;
             if i == 3 {
@@ -104,14 +98,8 @@ pub fn generate_temp_poses(
     } else {
         iter_count
     };
-    let (mut tmp_poses, tmp_drunk) = random_poses(
-        seed,
-        target_count * iter_count,
-        min_dist,
-        min_step_len,
-        max_step_len,
-        flatten,
-    );
+    let (mut tmp_poses, tmp_drunk) =
+        random_poses(seed, target_count * iter_count, min_dist, min_step_len, max_step_len, flatten);
     for i in (0..tmp_poses.len()).rev() {
         if i % (iter_count as usize) != 0 {
             tmp_poses.remove(i);
@@ -138,8 +126,7 @@ pub fn random_poses(
     let random_num = rand.next_double();
     let min_loop_count = 6;
     let max_loop_count = 8;
-    let num4 =
-        (random_num * (max_loop_count - min_loop_count) as f64 + min_loop_count as f64) as i32;
+    let num4 = (random_num * (max_loop_count - min_loop_count) as f64 + min_loop_count as f64) as i32;
     // 大的 Part 1
     for _ in 0..num4 {
         for _ in 0..PLANET_ID_MAX {
@@ -151,8 +138,7 @@ pub fn random_poses(
             let mut random_step_size = rand.next_double();
             if length_square <= 1.0 && length_square >= 1E-08 {
                 let distance = length_square.sqrt();
-                random_step_size =
-                    (random_step_size * (max_step_len - min_step_len) + min_dist) / distance;
+                random_step_size = (random_step_size * (max_step_len - min_step_len) + min_dist) / distance;
                 rand_vec *= random_step_size;
                 if !check_collision(&tmp_poses, &rand_vec, min_dist) {
                     tmp_drunk.push(rand_vec);
@@ -178,8 +164,7 @@ pub fn random_poses(
                 let mut random_step_size = rand.next_double();
                 if length_square <= 1.0 && length_square >= 1E-08 {
                     let distance = length_square.sqrt();
-                    random_step_size =
-                        (random_step_size * (max_step_len - min_step_len) + min_dist) / distance;
+                    random_step_size = (random_step_size * (max_step_len - min_step_len) + min_dist) / distance;
                     // let vector_lf2 = rand_vec * random_step_size;
                     rand_vec *= random_step_size;
                     if !check_collision(&tmp_poses, &rand_vec, min_dist) {

@@ -96,10 +96,7 @@ impl GameDesc {
         // TODO: combat
         // if self.
         // return galaxySeed * 100000000L + (long)num2 * 100000L + (long)num3 * 1000L + (long)num4;
-        galaxy_seed as i64
-            + star_count as i64 * 100000
-            + resource_multiplier * 1000
-            + combat_multiplier
+        galaxy_seed as i64 + star_count as i64 * 100000 + resource_multiplier * 1000 + combat_multiplier
     }
 
     /// 是否为困难模式

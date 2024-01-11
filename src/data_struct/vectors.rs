@@ -36,15 +36,9 @@ impl LocalQuaternion for Quaternion {
         let mut v = v * 2.0;
         let num = (self.w as f64).powi(2) - 0.5;
         let num2: f64 = self.x as f64 * v.x + self.y as f64 * v.y + self.z as f64 * v.z;
-        v.x = v.x * num
-            + (self.y as f64 * v.z - self.z as f64 * v.y) * self.w as f64
-            + self.x as f64 * num2;
-        v.y = v.y * num
-            + (self.z as f64 * v.x - self.x as f64 * v.z) * self.w as f64
-            + self.y as f64 * num2;
-        v.z = v.z * num
-            + (self.x as f64 * v.y - self.y as f64 * v.x) * self.w as f64
-            + self.z as f64 * num2;
+        v.x = v.x * num + (self.y as f64 * v.z - self.z as f64 * v.y) * self.w as f64 + self.x as f64 * num2;
+        v.y = v.y * num + (self.z as f64 * v.x - self.x as f64 * v.z) * self.w as f64 + self.y as f64 * num2;
+        v.z = v.z * num + (self.x as f64 * v.y - self.y as f64 * v.x) * self.w as f64 + self.z as f64 * num2;
         v
     }
 }

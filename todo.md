@@ -26,11 +26,22 @@
 
 - [x] [`simple_hash`](src/data_struct/simple_hash.rs)
 
-- [ ] `AstroOrbitData`
-  - [ ] 转换为 rust 代码
-  - [ ] `PredictPose`
-  - [ ] `GetVelocityAtPoint`
-  - [ ] `GetEstimatePointOffset`
+- [ ] [`astro_orbit_data`](src/data_struct/astro_orbit_data.rs)
+  - [x] 转换为 rust 代码
+  - [x] `predict_pose`
+  - [x] `get_velocity_at_point`
+  - [ ] `get_estimate_point_offset`
+
+- [ ] [`astro_data`](src/data_struct/astro_data.rs)
+  - [x] 框架搭好
+  - [ ] 那一大堆方法复刻好
+    - [x] `PositionU`
+      - [x] `position_u_l`
+      - [x] `position_u_f`
+    - [ ] `VelocityU`
+    - [ ] `VelocityL2U`
+    - [ ] `VelocityU2L`
+    - [ ] `IdString`
 
 - [ ] [`planet_data`](src/data_struct/planet_data.rs)
   - [ ] 完善成员
