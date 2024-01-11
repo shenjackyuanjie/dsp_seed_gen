@@ -2,6 +2,12 @@ use crate::data_struct::vectors::{LocalVectors, VectorF3};
 use crate::data_struct::vege_data::VegeData;
 use crate::data_struct::vein_data::VeinData;
 
+pub static mut VERTS_80: [VectorF3; 80] = [];
+pub static mut VERTS_200: [VectorF3; 200] = [];
+
+pub static mut INDEX_MAP_80: [i32; 80] = [];
+pub static mut INDEX_MAP_200: [i32; 200] = [];
+
 pub struct PlanetRawData {
     pub precision: i32,
     pub height_data: Vec<u16>,
@@ -57,7 +63,7 @@ impl PlanetRawData {
             // vege_capacity: 0,
         }
     }
-    fn trans(&self, x: f32, pr: i32) -> i32 {
+    pub fn trans(&self, x: f32, pr: i32) -> i32 {
         let mut num = ((x + 0.23).sqrt() - 0.4795832) / 0.6294705 * pr as f32;
         if num >= pr as f32 {
             num = pr as f32 - 1.0;
