@@ -1,3 +1,5 @@
+use std::path::Display;
+
 use crate::data_struct::enums::EVeinType;
 use crate::data_struct::vectors::VectorF3;
 
@@ -10,6 +12,16 @@ pub struct VeinGroup {
     pub count: i32,
     /// long amount
     pub amount: i64,
+}
+
+impl Display for VeinGroup {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "[{}] {} | {}   @ {}",
+            self.vein_type, self.amount, self.count, self.pos
+        )
+    }
 }
 
 impl VeinGroup {
