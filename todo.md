@@ -48,6 +48,11 @@
 
 - [ ] [`planet_raw_data`](src/data_struct/planet_raw_data.rs)
   - [ ] 完善方法
+  - [x] `calc_verts`
+  - [x] `trans`
+  - [x] `position_hash`
+  - [x] `query_index`
+  - [x] `add_vein/vege_data`
 
 - [ ] [`star_data`](src/data_struct/star_data.rs)
 
