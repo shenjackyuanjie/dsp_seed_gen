@@ -34,14 +34,13 @@
 
 - [ ] [`astro_data`](src/data_struct/astro_data.rs)
   - [x] 框架搭好
-  - [ ] 那一大堆方法复刻好
-    - [x] `PositionU`
-      - [x] `position_u_l`
-      - [x] `position_u_f`
-    - [ ] `VelocityU`
-    - [ ] `VelocityL2U`
-    - [ ] `VelocityU2L`
-    - [ ] `IdString`
+  - [x] `PositionU`
+    - [x] `position_u_l`
+    - [x] `position_u_f`
+  - [ ] `VelocityU`
+  - [ ] `VelocityL2U`
+  - [ ] `VelocityU2L`
+  - [ ] `IdString`
 
 - [ ] [`planet_data`](src/data_struct/planet_data.rs)
   - [ ] 完善成员
