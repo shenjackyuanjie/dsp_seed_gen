@@ -1,6 +1,7 @@
 use crate::data_struct::simple_hash::SimpleHash;
 use crate::data_struct::vectors::{Quaternion, VectorF3};
 
+#[derive(Clone)]
 pub struct VegeData {
     pub id: i32,
     pub proto_id: i16,

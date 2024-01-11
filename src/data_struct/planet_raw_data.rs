@@ -35,6 +35,7 @@ pub static POLES: [VectorF3; 6] = [
     VectorF3::new(0.0, 0.0, -1.0),
 ];
 
+#[derive(Clone)]
 pub struct PlanetRawData {
     pub precision: i32,
     pub height_data: Vec<u16>,

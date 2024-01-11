@@ -2,6 +2,7 @@ pub use crate::data_struct::consts::OIL_SPEED_MULTIPLIER;
 use crate::data_struct::enums::EVeinType;
 use crate::data_struct::vectors::VectorF3;
 
+#[derive(Clone)]
 pub struct VeinData {
     pub id: i32,
     pub vein_type: EVeinType,

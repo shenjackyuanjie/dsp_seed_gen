@@ -3,6 +3,7 @@ use std::fmt::Display;
 use crate::data_struct::enums::EVeinType;
 use crate::data_struct::vectors::VectorF3;
 
+#[derive(Clone)]
 pub struct VeinGroup {
     /// 矿物类型
     pub vein_type: EVeinType,

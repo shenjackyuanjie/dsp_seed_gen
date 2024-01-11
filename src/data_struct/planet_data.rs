@@ -11,11 +11,12 @@ use crate::data_struct::vein_group::VeinGroup;
 pub const K_ENTER_ALTITUDE: f32 = 1000.0;
 pub const K_BIRTH_HEIGHT_SHIFT: f32 = 1.45;
 
+#[derive(Clone)]
 pub struct PlanetData {
     /// 星系数据
     pub galaxy: Rc<RefCell<GalaxyData>>,
     /// 星星数据
-    pub star: StarData,
+    pub star: Rc<RefCell<StarData>>,
     /// 种子
     pub seed: i32,
     /// 信息种子
@@ -91,7 +92,7 @@ pub struct PlanetData {
     /// 样式
     pub style: i32,
     /// 绕行行星
-    pub orbit_around_planet: Option<Rc<PlanetData>>,
+    pub orbit_around_planet: Rc<RefCell<Option<PlanetData>>>,
     /// 运行时位置
     pub runtime_position: VectorLF3,
     /// 下一个运行时位置
@@ -157,10 +158,15 @@ pub struct PlanetData {
 }
 
 impl PlanetData {
-    pub fn new(galaxy_data: Rc<RefCell<GalaxyData>>, seed: i32, info_seed: i32) -> Self {
+    pub fn new(
+        galaxy_data: &Rc<RefCell<GalaxyData>>,
+        star_data: &Rc<RefCell<StarData>>,
+        seed: i32,
+        info_seed: i32,
+    ) -> Self {
         Self {
             galaxy: galaxy_data.clone(),
-            star: StarData::new(galaxy_data.clone(), seed),
+            star: star_data.clone(),
             seed,
             info_seed,
             id: 0,
@@ -198,7 +204,7 @@ impl PlanetData {
             theme: 0,
             algo_id: 0,
             style: 0,
-            orbit_around_planet: None,
+            orbit_around_planet: Rc::new(RefCell::new(None)),
             runtime_position: VectorLF3::zeros(),
             runtime_position_next: VectorLF3::zeros(),
             runtime_rotation: Quaternion::zeros(),

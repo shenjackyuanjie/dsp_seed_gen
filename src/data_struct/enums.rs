@@ -11,7 +11,7 @@ pub enum EPlanetType {
 }
 
 bitflags! {
-    #[derive(Debug, Clone, Copy)]
+    #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
     pub struct EPlanetSingularity: u32 {
         const NONE = 0;
         const TIDAL_LOCKED = 1;

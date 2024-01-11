@@ -1,3 +1,4 @@
+#[derive(Clone, Copy)]
 pub struct SimpleHash {
     bits: u32,
 }
