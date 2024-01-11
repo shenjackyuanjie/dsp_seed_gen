@@ -6,6 +6,7 @@ use crate::data_struct::galaxy_data::GalaxyData;
 use crate::data_struct::planet_raw_data::PlanetRawData;
 use crate::data_struct::star_data::StarData;
 use crate::data_struct::vectors::{Quaternion, VectorF3, VectorLF3};
+use crate::data_struct::vein_group::VeinGroup;
 
 pub const K_ENTER_ALTITUDE: f32 = 1000.0;
 pub const K_BIRTH_HEIGHT_SHIFT: f32 = 1.45;
@@ -32,7 +33,7 @@ pub struct PlanetData {
     /// 名称
     pub name: String,
     /// 覆盖名称
-    pub override_name: String,
+    pub override_name: Option<String>,
     /// 轨道半径
     pub orbit_radius: f32,
     /// 轨道倾角
@@ -124,10 +125,34 @@ pub struct PlanetData {
     /// 矿物组锁
     // pub vein_groups_lock: Mutex,
     /// 矿物组
-    // pub vein_groups: Vec<VeinGroup>,
+    pub vein_groups: Vec<VeinGroup>,
     /// 矿物偏向向量
     pub vein_bias_vector: VectorF3,
     // ... 其他字段
+    pub factory_index: i32,
+    // pub factory: PlanetFactory,
+    /// 气体项目
+    pub gas_items: Vec<i32>,
+    /// 气体速度
+    pub gas_speeds: Vec<f32>,
+    /// 气体热值
+    pub gas_heat_values: Vec<f32>,
+    /// 气体总热量
+    pub gas_total_heat: f64,
+    /// 出生点
+    pub birth_point: VectorF3,
+    /// 出生资源点0
+    pub birth_resource_point0: VectorF3,
+    /// 出生资源点1
+    pub birth_resource_point1: VectorF3,
+    pub loaded: bool,
+    pub wanted: bool,
+    pub loading: bool,
+    pub calculating: bool,
+    pub calculated: bool,
+    pub factory_loaded: bool,
+    pub factory_loading: bool,
+    pub facting_completed_stage: i32,
     // TODO
 }
 
@@ -144,7 +169,7 @@ impl PlanetData {
             number: 0,
             orbit_index: 0,
             name: "".to_string(),
-            override_name: "".to_string(),
+            override_name: None,
             orbit_radius: 1.0,
             orbit_inclination: 0.0,
             orbit_longitude: 0.0,
@@ -189,7 +214,35 @@ impl PlanetData {
             precision: 160,
             segment: 5,
             data: PlanetRawData::new(),
+            vein_groups: Vec::new(),
             vein_bias_vector: VectorF3::zeros(),
+            factory_index: 0,
+            // factory: PlanetFactory::new(),
+            gas_items: Vec::new(),
+            gas_speeds: Vec::new(),
+            gas_heat_values: Vec::new(),
+            gas_total_heat: 0.0,
+            birth_point: VectorF3::zeros(),
+            birth_resource_point0: VectorF3::zeros(),
+            birth_resource_point1: VectorF3::zeros(),
+            loaded: false,
+            wanted: false,
+            loading: false,
+            calculating: false,
+            calculated: false,
+            factory_loaded: false,
+            factory_loading: false,
+            facting_completed_stage: 0,
         }
+    }
+    pub fn display_name(&self) -> String {
+        if self.override_name.is_some() {
+            self.override_name.as_ref().unwrap().clone()
+        } else {
+            self.name.clone()
+        }
+    }
+    pub fn read_radius(&self) -> f32 {
+        self.radius * self.scale
     }
 }
