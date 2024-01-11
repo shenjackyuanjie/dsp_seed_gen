@@ -96,7 +96,7 @@ pub fn create_planet(
         num16 *= (num15 - 1.0) / num16.max(1.0) + 1.0;
     } else {
         num16 = ((1600.0 * orbit_index as f32 + 200.0) * star.borrow().orbit_scaler.powf(0.3) * num15.lerp(1.0, 0.5)
-            + planet_data.orbit_around_planet.unwrap().borrow().read_radius() as f32)
+            + planet_round_borrow.unwrap().read_radius() as f32)
             / 40000.0;
     }
     todo!()
