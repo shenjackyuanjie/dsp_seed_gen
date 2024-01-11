@@ -52,6 +52,8 @@
   - [x] `position_hash`
   - [x] `query_index`
   - [x] `add_vein/vege_data`
+  - [ ] `EraseVegetableAtPoint`
+  - [ ] `QueryHeight`
 
 - [ ] [`star_data`](src/data_struct/star_data.rs)
 
