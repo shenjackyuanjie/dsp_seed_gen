@@ -1,5 +1,6 @@
 pub const PI: f64 = 3.141592653589793;
 pub const GRAVITY: f64 = 1.3538551990520382E-06;
+pub static OIL_SPEED_MULTIPLIER: f32 = 4E-05;
 
 pub mod combat {
 

@@ -1,7 +1,6 @@
+pub use crate::data_struct::consts::OIL_SPEED_MULTIPLIER;
 use crate::data_struct::enums::EVeinType;
 use crate::data_struct::vectors::VectorF3;
-
-pub static OIL_SPEED_MULTIPLIER: f32 = 4E-05;
 
 pub struct VeinData {
     pub id: i32,
@@ -53,7 +52,34 @@ impl VeinData {
             miner_circle_model_id3: 0,
         }
     }
-
+    pub fn add_miner(&mut self, miner_id: i32) {
+        if miner_id == self.miner_id0
+            || miner_id == self.miner_id1
+            || miner_id == self.miner_id2
+            || miner_id == self.miner_id3
+        {
+            return;
+        }
+        if self.miner_id0 == 0 {
+            self.miner_id0 = miner_id;
+            self.miner_count += 1;
+            return;
+        }
+        if self.miner_id1 == 0 {
+            self.miner_id1 = miner_id;
+            self.miner_count += 1;
+            return;
+        }
+        if self.miner_id2 == 0 {
+            self.miner_id2 = miner_id;
+            self.miner_count += 1;
+            return;
+        }
+        if self.miner_id3 == 0 {
+            self.miner_id3 = miner_id;
+            self.miner_count += 1;
+        }
+    }
     pub fn remove_miner(&mut self, miner_id: i32) {
         if self.miner_id0 == miner_id {
             self.miner_id0 = 0;
@@ -82,35 +108,6 @@ impl VeinData {
         if self.miner_id3 == miner_id {
             self.miner_id3 = 0;
             self.miner_count -= 1;
-        }
-    }
-
-    pub fn add_miner(&mut self, miner_id: i32) {
-        if miner_id == self.miner_id0
-            || miner_id == self.miner_id1
-            || miner_id == self.miner_id2
-            || miner_id == self.miner_id3
-        {
-            return;
-        }
-        if self.miner_id0 == 0 {
-            self.miner_id0 = miner_id;
-            self.miner_count += 1;
-            return;
-        }
-        if self.miner_id1 == 0 {
-            self.miner_id1 = miner_id;
-            self.miner_count += 1;
-            return;
-        }
-        if self.miner_id2 == 0 {
-            self.miner_id2 = miner_id;
-            self.miner_count += 1;
-            return;
-        }
-        if self.miner_id3 == 0 {
-            self.miner_id3 = miner_id;
-            self.miner_count += 1;
         }
     }
 }
