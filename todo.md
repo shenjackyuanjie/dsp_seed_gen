@@ -51,7 +51,7 @@
 
 - [ ] [`star_data`](src/data_struct/star_data.rs)
 
-- [ ] [`vein_data`](src/data_struct/vein_data.rs)
+- [x] [`vein_data`](src/data_struct/vein_data.rs)
 
 - [x] [`vein_group`](src/data_struct/vein_group.rs)
 
