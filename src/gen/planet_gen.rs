@@ -19,8 +19,8 @@ pub const K_GIANT_MASS: f32 = 0.019999979;
 pub static mut GAS_COEF: f32 = 1.0;
 
 pub fn create_planet(
-    galaxy: &Rc<RefCell<GalaxyData>>,
-    star: &Rc<RefCell<StarData>>,
+    galaxy: Rc<RefCell<GalaxyData>>,
+    star: Rc<RefCell<StarData>>,
     theme_ids: Vec<i32>,
     index: i32,
     orbit_around: i32,
@@ -30,33 +30,37 @@ pub fn create_planet(
     info_seed: i32,
     gen_seed: i32,
 ) -> PlanetData {
-    let mut planet_data = PlanetData::new(galaxy, star, gen_seed, info_seed);
+    let mut planet_data = PlanetData::new(galaxy.clone(), star.clone(), gen_seed, info_seed);
     planet_data.index = index;
     planet_data.orbit_around = orbit_around;
     planet_data.orbit_index = orbit_index;
     planet_data.number = number;
-    planet_data.id = star.borrow().astro_id() + index + 1;
+    let star_borrow = (*star.borrow()).clone();
+    let planet_round_borrow = (*planet_data.orbit_around_planet.borrow()).clone();
+    planet_data.id = star_borrow.astro_id() + index + 1;
     if orbit_around > 0 {
         let mut j = 0;
-        while j < star.borrow().planet_count {
+        while j < star_borrow.planet_count {
             if (orbit_around == star.borrow().planets[j as usize].number)
                 & (star.borrow().planets[j as usize].orbit_around == 0)
             {
-                planet_data.orbit_around_planet =
-                    Some(Rc::new(RefCell::new(star.borrow().planets[j as usize].clone())));
+                let data = star_borrow.planets[j as usize].clone();
+                planet_data.orbit_around_planet.replace(Some(data));
                 if orbit_index > 1 {
-                    let oap: Rc<RefCell<PlanetData>> = planet_data.orbit_around_planet.unwrap();
-                    let mut oap = oap.borrow_mut();
-                    oap.singularity = oap.singularity | EPlanetSingularity::MULTIPLE_SATELLITES;
-                    // oap |= EPlanetSingularity::MULTIPLE_SATELLITES;
-                    todo!("bitflags")
+                    planet_round_borrow.unwrap().singularity |= EPlanetSingularity::MULTIPLE_SATELLITES;
+                    // let oap: Rc<RefCell<PlanetData>> = planet_data.orbit_around_planet.);
+                    // let mut oap = oap.get_mut();
+                    // oap.singularity = oap.singularity | EPlanetSingularity::MULTIPLE_SATELLITES;
+                    // // oap |= EPlanetSingularity::MULTIPLE_SATELLITES;
+                    // planet_data.orbit_around_planet = Some(Rc::new(RefCell::new(oap)));
                 }
                 break;
             } else {
                 j += 1;
             }
         }
-        assert!(planet_data.orbit_around_planet.is_some());
+        // Assert.NotNull(planetData.orbitAroundPlanet);
+        assert!(planet_round_borrow.is_some());
     }
     let name: String;
     if star.borrow().planet_count <= 20 {

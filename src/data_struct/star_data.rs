@@ -11,6 +11,7 @@ pub const K_PHYSICS_RADIUS_RATIO: f32 = 1200.0;
 pub const K_VIEW_RADIUS_RATIO: f32 = 800.0;
 pub const K_MAX_DFHIVE_ORBIT: i32 = 8;
 
+#[derive(Clone)]
 pub struct StarData {
     pub galaxy: Rc<RefCell<GalaxyData>>,
     pub seed: i32,

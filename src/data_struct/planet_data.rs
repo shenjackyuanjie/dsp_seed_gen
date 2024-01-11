@@ -92,7 +92,7 @@ pub struct PlanetData {
     /// 样式
     pub style: i32,
     /// 绕行行星
-    pub orbit_around_planet: Option<Rc<RefCell<PlanetData>>>,
+    pub orbit_around_planet: Rc<RefCell<Option<PlanetData>>>,
     /// 运行时位置
     pub runtime_position: VectorLF3,
     /// 下一个运行时位置
@@ -159,8 +159,8 @@ pub struct PlanetData {
 
 impl PlanetData {
     pub fn new(
-        galaxy_data: &Rc<RefCell<GalaxyData>>,
-        star_data: &Rc<RefCell<StarData>>,
+        galaxy_data: Rc<RefCell<GalaxyData>>,
+        star_data: Rc<RefCell<StarData>>,
         seed: i32,
         info_seed: i32,
     ) -> Self {
@@ -204,7 +204,7 @@ impl PlanetData {
             theme: 0,
             algo_id: 0,
             style: 0,
-            orbit_around_planet: None,
+            orbit_around_planet: Rc::new(RefCell::new(None)),
             runtime_position: VectorLF3::zeros(),
             runtime_position_next: VectorLF3::zeros(),
             runtime_rotation: Quaternion::zeros(),
