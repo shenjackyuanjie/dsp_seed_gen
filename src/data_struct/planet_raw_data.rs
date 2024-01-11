@@ -1,4 +1,4 @@
-use crate::data_struct::vectors::VectorF3;
+use crate::data_struct::vectors::{LocalVectors, VectorF3};
 use crate::data_struct::vege_data::VegeData;
 use crate::data_struct::vein_data::VeinData;
 
@@ -18,10 +18,10 @@ pub struct PlanetRawData {
     pub index_map_corner_stride: i32,
     pub vein_pool: Vec<VeinData>,
     pub vein_cursor: i32,
-    pub vein_capacity: i32,
+    // pub vein_capacity: i32,
     pub vege_pool: Vec<VegeData>,
     pub vege_cursor: i32,
-    pub vege_capacity: i32,
+    // pub vege_capacity: i32,
 }
 
 // pub static POLES: [Vector3; 6] = [
@@ -51,13 +51,12 @@ impl PlanetRawData {
             index_map_corner_stride: 0,
             vein_pool: Vec::new(),
             vein_cursor: 0,
-            vein_capacity: 0,
+            // vein_capacity: 0,
             vege_pool: Vec::new(),
             vege_cursor: 0,
-            vege_capacity: 0,
+            // vege_capacity: 0,
         }
     }
-
     fn trans(&self, x: f32, pr: i32) -> i32 {
         let mut num = ((x + 0.23).sqrt() - 0.4795832) / 0.6294705 * pr as f32;
         if num >= pr as f32 {
@@ -65,7 +64,6 @@ impl PlanetRawData {
         }
         num as i32
     }
-
     pub fn position_hash(&self, v: &VectorF3, corner: Option<i32>) -> i32 {
         let mut v = v.to_owned();
         let corner = match corner {
@@ -106,5 +104,43 @@ impl PlanetRawData {
             + num3 * self.index_map_precision
             + num * self.index_map_face_stride
             + corner * self.index_map_corner_stride;
+    }
+    pub fn query_index(&self, vpos: &VectorF3) -> i32 {
+        let mut vpos = vpos.to_owned().normalize();
+        let num = self.position_hash(&vpos, None);
+        let num2 = self.index_map[num as usize];
+        let num3 = 3.1415927 / (self.precision * 2) as f64 * 0.25;
+        let num3 = num3 * num3;
+        let stride = self.index_map_face_stride;
+        let mut num4 = 10.0;
+        let mut result = num2;
+        for i in -1..=3 {
+            for j in -1..=3 {
+                let num5 = num2 + i + j * stride;
+                if num5 >= 0 && num5 < self.index_map_data_length {
+                    let sqr_magnitude = (self.vertices[num5 as usize] - vpos).sqr_magnitude();
+                    if sqr_magnitude < num3 as f32 {
+                        return num5;
+                    }
+                    if sqr_magnitude < num4 {
+                        num4 = sqr_magnitude;
+                        result = num5;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+    pub fn add_vein_data(&mut self, mut vein_data: VeinData) -> i32 {
+        self.vein_cursor += 1;
+        vein_data.id = self.vein_cursor;
+        self.vein_pool[self.vege_cursor as usize] = vein_data;
+        return self.vege_cursor;
+    }
+    pub fn add_vege_data(&mut self, mut vege_data: VegeData) -> i32 {
+        self.vege_cursor += 1;
+        vege_data.id = self.vege_cursor;
+        self.vege_pool[self.vege_cursor as usize] = vege_data;
+        return self.vege_cursor;
     }
 }
