@@ -1,8 +1,8 @@
 use std::cell::RefCell;
 use std::rc::Rc;
 
-use lerp::Lerp;
 use dotnet35_rand_rs::DotNet35Random;
+use lerp::Lerp;
 
 // use crate::data_struct::consts::{GRAVITY, PI};
 use crate::data_struct::enums::EPlanetSingularity;
@@ -43,10 +43,10 @@ pub fn create_planet(
                 & (star.borrow().planets[j as usize].orbit_around == 0)
             {
                 planet_data.orbit_around_planet =
-                    Rc::new(RefCell::new(Some(star.borrow().planets[j as usize].clone())));
+                    Some(Rc::new(RefCell::new(star.borrow().planets[j as usize].clone())));
                 if orbit_index > 1 {
-                    let mut oap = planet_data.orbit_around_planet.borrow_mut();
-                    let mut oap = oap.as_mut().unwrap();
+                    let oap: Rc<RefCell<PlanetData>> = planet_data.orbit_around_planet.unwrap();
+                    let mut oap = oap.borrow_mut();
                     oap.singularity = oap.singularity | EPlanetSingularity::MULTIPLE_SATELLITES;
                     // oap |= EPlanetSingularity::MULTIPLE_SATELLITES;
                     todo!("bitflags")
@@ -56,7 +56,7 @@ pub fn create_planet(
                 j += 1;
             }
         }
-        assert!(planet_data.orbit_around_planet.borrow().is_some());
+        assert!(planet_data.orbit_around_planet.is_some());
     }
     let name: String;
     if star.borrow().planet_count <= 20 {
@@ -92,7 +92,7 @@ pub fn create_planet(
         num16 *= (num15 - 1.0) / num16.max(1.0) + 1.0;
     } else {
         num16 = ((1600.0 * orbit_index as f32 + 200.0) * star.borrow().orbit_scaler.powf(0.3) * num15.lerp(1.0, 0.5)
-            + planet_data.orbit_around_planet.borrow().unwrap().read_radius() as f32)
+            + planet_data.orbit_around_planet.unwrap().borrow().read_radius() as f32)
             / 40000.0;
     }
     todo!()
