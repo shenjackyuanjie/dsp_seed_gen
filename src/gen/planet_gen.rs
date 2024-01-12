@@ -60,6 +60,7 @@ pub fn create_planet(
             }
         }
         // Assert.NotNull(planetData.orbitAroundPlanet);
+        let planet_round_borrow = (*planet_data.orbit_around_planet.borrow()).clone();
         assert!(planet_round_borrow.is_some());
     }
     let name: String;
