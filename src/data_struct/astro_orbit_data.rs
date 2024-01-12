@@ -1,6 +1,7 @@
 use crate::data_struct::astro_data::AstroData;
-use crate::data_struct::consts::PI;
 use crate::data_struct::vectors::{LocalQuaternion, Quaternion, VectorLF3};
+
+use std::f64::consts::PI;
 
 pub struct AstroOrbitData {
     orbit_radius: f32,
@@ -29,7 +30,7 @@ impl AstroOrbitData {
 
     pub fn predict_pose(&mut self, time: i64, center: VectorLF3, astro_data: &mut AstroData) {
         let num = 40000.0 * self.orbit_radius as f64;
-        let mut num2: f64 = time as f64 / (self.orbital_period as f64 * 60.0) + self.orbit_phase as f64 / 360.0;
+        let mut num2: f64 = time as f64 / (self.orbital_period * 60.0) + self.orbit_phase as f64 / 360.0;
         let num3 = (num2 + 0.1).floor();
         num2 -= num3;
         self.runtime_orbit_phase = (num2 * 360.0) as f32;
@@ -48,8 +49,8 @@ impl AstroOrbitData {
     }
 
     pub fn get_velocity_at_point(&self, center: VectorLF3, u_pos: VectorLF3) -> VectorLF3 {
-        let mut vector_lf = u_pos - center;
-        let mut quaternion =
+        let vector_lf = u_pos - center;
+        let quaternion =
             Quaternion::angle_axis(-360.0 / (self.orbital_period * 60.0) as f32, &self.orbit_normal.cast::<f32>());
         quaternion.rotation_lf(&vector_lf) - vector_lf
     }

@@ -174,7 +174,7 @@ impl PlanetData {
             orbit_around: 0,
             number: 0,
             orbit_index: 0,
-            name: "".to_string(),
+            name: String::new(),
             override_name: None,
             orbit_radius: 1.0,
             orbit_inclination: 0.0,
@@ -242,10 +242,9 @@ impl PlanetData {
         }
     }
     pub fn display_name(&self) -> String {
-        if self.override_name.is_some() {
-            self.override_name.as_ref().unwrap().clone()
-        } else {
-            self.name.clone()
+        match &self.override_name {
+            Some(str) => str.clone(),
+            None => self.name.clone(),
         }
     }
     pub fn read_radius(&self) -> f32 {

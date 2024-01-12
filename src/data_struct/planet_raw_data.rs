@@ -1,3 +1,4 @@
+use std::f32::consts::PI;
 use std::vec;
 
 use crate::data_struct::vectors::{LocalVectors, VectorF3};
@@ -102,7 +103,7 @@ impl PlanetRawData {
     pub fn data_length(&self) -> i32 {
         (self.precision + 1) * (self.precision + 1) * 4
     }
-    pub fn calc_verts(&mut self) -> () {
+    pub fn calc_verts(&mut self) {
         if ((self.precision == 80) & self.verts_80.is_some()) || ((self.precision == 200) & self.verts_200.is_some()) {
             self.vertices = self.verts_80.unwrap().to_vec();
         }
@@ -127,57 +128,57 @@ impl PlanetRawData {
             let corner: i32;
             match num7 {
                 0 => {
-                    a = POLES[2].clone();
-                    a2 = POLES[0].clone();
-                    b = POLES[4].clone();
+                    a = POLES[2];
+                    a2 = POLES[0];
+                    b = POLES[4];
                     corner = 7;
                 }
                 1 => {
-                    a = POLES[0].clone();
-                    a2 = POLES[3].clone();
-                    b = POLES[4].clone();
+                    a = POLES[0];
+                    a2 = POLES[3];
+                    b = POLES[4];
                     corner = 6;
                 }
                 2 => {
-                    a = POLES[2].clone();
-                    a2 = POLES[1].clone();
-                    b = POLES[4].clone();
+                    a = POLES[2];
+                    a2 = POLES[1];
+                    b = POLES[4];
                     corner = 5;
                 }
                 3 => {
-                    a = POLES[3].clone();
-                    a2 = POLES[1].clone();
-                    b = POLES[4].clone();
+                    a = POLES[3];
+                    a2 = POLES[1];
+                    b = POLES[4];
                     corner = 4;
                 }
                 4 => {
-                    a = POLES[2].clone();
-                    a2 = POLES[1].clone();
-                    b = POLES[5].clone();
+                    a = POLES[2];
+                    a2 = POLES[1];
+                    b = POLES[5];
                     corner = 2;
                 }
                 5 => {
-                    a = POLES[3].clone();
-                    a2 = POLES[5].clone();
-                    b = POLES[1].clone();
+                    a = POLES[3];
+                    a2 = POLES[5];
+                    b = POLES[1];
                     corner = 0;
                 }
                 6 => {
-                    a = POLES[2].clone();
-                    a2 = POLES[5].clone();
-                    b = POLES[0].clone();
+                    a = POLES[2];
+                    a2 = POLES[5];
+                    b = POLES[0];
                     corner = 3;
                 }
                 7 => {
-                    a = POLES[3].clone();
-                    a2 = POLES[0].clone();
-                    b = POLES[5].clone();
+                    a = POLES[3];
+                    a2 = POLES[0];
+                    b = POLES[5];
                     corner = 1;
                 }
                 _ => {
-                    a = POLES[2].clone();
-                    a2 = POLES[0].clone();
-                    b = POLES[4].clone();
+                    a = POLES[2];
+                    a2 = POLES[0];
+                    b = POLES[4];
                     corner = 7;
                 }
             }
@@ -201,7 +202,6 @@ impl PlanetRawData {
             if self.verts_200.is_none() {
                 self.verts_200 = Some(self.vertices.clone().try_into().unwrap());
                 self.index_map_200 = Some(self.index_map.clone().try_into().unwrap());
-                return;
             }
         } else if (self.precision == 80) & self.verts_80.is_none() {
             self.verts_80 = Some(self.vertices.clone().try_into().unwrap());
@@ -251,16 +251,15 @@ impl PlanetRawData {
             num2 = self.trans(v.x / v.z, self.index_map_precision);
             num3 = self.trans(v.y / v.z, self.index_map_precision);
         }
-        return num2
-            + num3 * self.index_map_precision
+        num2 + num3 * self.index_map_precision
             + num * self.index_map_face_stride
-            + corner * self.index_map_corner_stride;
+            + corner * self.index_map_corner_stride
     }
     pub fn query_index(&self, vpos: &VectorF3) -> i32 {
-        let mut vpos = vpos.to_owned().normalize();
+        let vpos = vpos.to_owned().normalize();
         let num = self.position_hash(&vpos, None);
         let num2 = self.index_map[num as usize];
-        let num3 = 3.1415927 / (self.precision * 2) as f64 * 0.25;
+        let num3 = PI / (self.precision * 2) as f32 * 0.25;
         let num3 = num3 * num3;
         let stride = self.index_map_face_stride;
         let mut num4 = 10.0;
@@ -270,7 +269,7 @@ impl PlanetRawData {
                 let num5 = num2 + i + j * stride;
                 if num5 >= 0 && num5 < self.index_map_data_length {
                     let sqr_magnitude = (self.vertices[num5 as usize] - vpos).sqr_magnitude();
-                    if sqr_magnitude < num3 as f32 {
+                    if sqr_magnitude < num3 {
                         return num5;
                     }
                     if sqr_magnitude < num4 {
@@ -280,18 +279,18 @@ impl PlanetRawData {
                 }
             }
         }
-        return result;
+        result
     }
     pub fn add_vein_data(&mut self, mut vein_data: VeinData) -> i32 {
         self.vein_cursor += 1;
         vein_data.id = self.vein_cursor;
         self.vein_pool[self.vege_cursor as usize] = vein_data;
-        return self.vege_cursor;
+        self.vege_cursor
     }
     pub fn add_vege_data(&mut self, mut vege_data: VegeData) -> i32 {
         self.vege_cursor += 1;
         vege_data.id = self.vege_cursor;
         self.vege_pool[self.vege_cursor as usize] = vege_data;
-        return self.vege_cursor;
+        self.vege_cursor
     }
 }

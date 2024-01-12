@@ -24,11 +24,11 @@ pub fn create_galaxy(game: GameDesc) -> GalaxyData {
     let mut rand = DotNet35Random::new(game.galaxy_seed);
     let (tmp_poses, tmp_drunk) = generate_temp_poses(rand.next(), game.star_count, 4, 2.0, 2.3, 3.5, 0.18);
     let num = tmp_poses.len() as i32;
-    let mut galaxy_data = GalaxyData::new(game.galaxy_seed, game.star_count);
-    if tmp_poses.len() <= 0 {
+    let galaxy_data = GalaxyData::new(game.galaxy_seed, game.star_count);
+    if tmp_poses.is_empty() {
         return galaxy_data;
     }
-    let mut galaxy_data = Rc::new(RefCell::new(galaxy_data));
+    let galaxy_data = Rc::new(RefCell::new(galaxy_data));
     let num2 = rand.next_double() as f32;
     let num3 = rand.next_double() as f32;
     let num4 = rand.next_double() as f32;

@@ -25,18 +25,18 @@ impl AstroData {
             u_pos_next: VectorLF3::zeros(),
         }
     }
-    pub fn position_u_l(&self, upos: &mut VectorLF3) -> () {
+    pub fn position_u_l(&self, upos: &mut VectorLF3) {
         let num = 2.0 * upos.x;
         let num2 = 2.0 * upos.y;
         let num3 = 2.0 * upos.z;
         let num4 = (self.u_rot.w * self.u_rot.w) as f64 - 0.5;
         let u_rot = self.u_rot.cast::<f64>();
         let num5 = u_rot.x * num + u_rot.y * num2 + u_rot.z * num3;
-        upos.x = num * num4 + (u_rot.y * num3 - u_rot.z * num2) * u_rot.w + u_rot.x * num5 + self.u_pos.x as f64;
-        upos.y = num2 * num4 + (u_rot.z * num - u_rot.x * num3) * u_rot.w + u_rot.y * num5 + self.u_pos.y as f64;
-        upos.z = num3 * num4 + (u_rot.x * num2 - u_rot.y * num) * u_rot.w + u_rot.z * num5 + self.u_pos.z as f64;
+        upos.x = num * num4 + (u_rot.y * num3 - u_rot.z * num2) * u_rot.w + u_rot.x * num5 + self.u_pos.x;
+        upos.y = num2 * num4 + (u_rot.z * num - u_rot.x * num3) * u_rot.w + u_rot.y * num5 + self.u_pos.y;
+        upos.z = num3 * num4 + (u_rot.x * num2 - u_rot.y * num) * u_rot.w + u_rot.z * num5 + self.u_pos.z;
     }
-    pub fn position_u_f(&self, upos: &mut VectorLF3) -> () {
+    pub fn position_u_f(&self, upos: &mut VectorLF3) {
         let num = 2.0 * upos.x as f32;
         let num2 = 2.0 * upos.y as f32;
         let num3 = 2.0 * upos.z as f32;

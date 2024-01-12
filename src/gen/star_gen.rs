@@ -12,7 +12,6 @@ use dotnet35_rand_rs::DotNet35Random;
 
 pub const E: f64 = 2.7182817;
 pub const GRAVITY: f64 = 1.3538551990520382E-06;
-pub const PI: f64 = 3.141592653589793;
 
 pub static HIVE_ORBIT_RADIUS: [f32; 18] =
     [0.4, 0.55, 0.7, 0.83, 1.0, 1.2, 1.4, 1.58, 1.72, 1.9, 2.11, 2.29, 2.5, 2.78, 3.02, 3.3, 3.6, 3.9];
@@ -82,9 +81,8 @@ pub fn create_birth_star(galaxy_data: Rc<RefCell<GalaxyData>>, game_desc: &GameD
     }
     let d = 2.0 + 0.4 * (1.0 - star_data.mass as f64);
 
-    star_data.lifetime = (10000.0
-        * (0.1_f64).powf((star_data.mass as f64 * 0.5_f64).log10() / d.log10() + 1.0_f64) as f64
-        * age_factor) as f32;
+    star_data.lifetime =
+        (10000.0 * (0.1_f64).powf((star_data.mass as f64 * 0.5_f64).log10() / d.log10() + 1.0_f64) * age_factor) as f32;
 
     star_data.age = (age_base * 0.4 + 0.3) as f32;
     if SPECIFY_BIRTH_STAR_AGE > 0.00001 {
