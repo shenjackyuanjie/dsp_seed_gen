@@ -6,6 +6,7 @@ use lerp::Lerp;
 
 // use crate::data_struct::consts::{GRAVITY, PI};
 use crate::data_struct::enums::EPlanetSingularity;
+use crate::data_struct::enums::EStarType;
 use crate::data_struct::galaxy_data::GalaxyData;
 use crate::data_struct::planet_data::PlanetData;
 use crate::data_struct::star_data::StarData;
@@ -51,11 +52,6 @@ pub fn create_planet(
                 planet_data.orbit_around_planet.replace(Some(data));
                 if orbit_index > 1 {
                     planet_round_borrow.clone().unwrap().singularity |= EPlanetSingularity::MULTIPLE_SATELLITES;
-                    // let oap: Rc<RefCell<PlanetData>> = planet_data.orbit_around_planet.);
-                    // let mut oap = oap.get_mut();
-                    // oap.singularity = oap.singularity | EPlanetSingularity::MULTIPLE_SATELLITES;
-                    // // oap |= EPlanetSingularity::MULTIPLE_SATELLITES;
-                    // planet_data.orbit_around_planet = Some(Rc::new(RefCell::new(oap)));
                 }
                 break;
             } else {
@@ -107,6 +103,42 @@ pub fn create_planet(
 
     planet_data.orbit_radius = num16;
     planet_data.orbit_inclination = (num4 * 16.0 - 8.0) as f32;
-
+    if orbit_around > 0 {
+        planet_data.orbit_inclination *= 2.2;
+    }
+    planet_data.orbit_longitude = (num5 * 360.0) as f32;
+    if star.borrow().star_type > EStarType::NeutronStar {
+        if planet_data.orbit_inclination > 0.0 {
+            planet_data.orbit_inclination += 3.0;
+        } else {
+            planet_data.orbit_inclination -= 3.0;
+        }
+    }
+    if planet_round_borrow.is_none() {
+        planet_data.orbital_period = ((39.47841760435743 * (num16 as f64).powi(3))
+            / (1.3538551990520382e-06 * star.borrow().mass as f64))
+            .sqrt();
+    } else {
+        planet_data.orbital_period = ((39.47841760435743 * (num16 as f64).powi(3)) / 1.0830842106853677e-08).sqrt();
+    }
+    planet_data.orbit_phase = (num6 * 360.0) as f32;
+    if num14 < 0.03999999910593033 {
+        planet_data.obliquity = (num7 * (num8 - 0.5) * 39.9) as f32;
+        if planet_data.obliquity < 0.0 {
+            planet_data.obliquity -= 70.0;
+        } else {
+            planet_data.obliquity += 70.0;
+        }
+        planet_data.singularity |= EPlanetSingularity::LAY_SIDE;
+    } else if num14 < 0.10000000149011612 {
+        planet_data.obliquity = (num7 * (num8 - 0.5) * 80.0) as f32;
+        if planet_data.obliquity < 0.0 {
+            planet_data.obliquity -= 30.0;
+        } else {
+            planet_data.obliquity += 30.0;
+        }
+    } else {
+        planet_data.obliquity = (num7 * (num8 - 0.5) * 60.0) as f32;
+    }
     todo!()
 }

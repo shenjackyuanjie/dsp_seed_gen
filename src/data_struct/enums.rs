@@ -23,13 +23,13 @@ bitflags! {
     }
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub enum EStarType {
-    MainSeqStar,
-    GiantStar,
-    WhiteDwarf,
-    NeutronStar,
-    BlackHole,
+    MainSeqStar = 0,
+    GiantStar = 1,
+    WhiteDwarf = 2,
+    NeutronStar = 3,
+    BlackHole = 4,
 }
 
 #[derive(Debug, Clone, Copy)]
