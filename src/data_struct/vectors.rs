@@ -1,4 +1,4 @@
-pub use nalgebra::{Unit, UnitQuaternion, Vector2, Vector3, Vector4};
+use nalgebra::{Unit, UnitQuaternion, Vector2, Vector3, Vector4};
 
 pub type VectorF2 = Vector2<f32>;
 pub type VectorF3 = Vector3<f32>;

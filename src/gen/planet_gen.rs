@@ -10,6 +10,7 @@ use crate::data_struct::enums::EStarType;
 use crate::data_struct::galaxy_data::GalaxyData;
 use crate::data_struct::planet_data::PlanetData;
 use crate::data_struct::star_data::StarData;
+use crate::data_struct::vectors::{LocalQuaternion, Quaternion, VectorF3};
 use crate::gen::name_gen;
 use crate::gen::star_gen;
 
@@ -140,5 +141,70 @@ pub fn create_planet(
     } else {
         planet_data.obliquity = (num7 * (num8 - 0.5) * 60.0) as f32;
     }
+    planet_data.rotation_period = (num9 * num10 * 1000.0 + 400.0)
+        * if orbit_around == 0 {
+            num16.powf(0.25) as f64
+        } else {
+            1.0_f64
+        }
+        * if gas_giant { 0.2_f64 } else { 1.0_f64 };
+
+    if !gas_giant {
+        match star.borrow().star_type {
+            EStarType::WhiteDwarf => {
+                planet_data.rotation_period *= 0.5;
+            }
+            EStarType::NeutronStar => {
+                planet_data.rotation_period *= 0.20000000298023224;
+            }
+            EStarType::BlackHole => {
+                planet_data.rotation_period *= 0.15000000596046448;
+            }
+            _ => {}
+        }
+    }
+    planet_data.rotation_phase = (num11 * 360.0) as f32;
+    planet_data.sun_distance = if orbit_around == 0 {
+        planet_data.orbit_radius
+    } else {
+        planet_round_borrow.clone().unwrap().orbit_radius
+    };
+    planet_data.scale = 1.0;
+    let num18 = if orbit_around == 0 {
+        planet_data.orbital_period
+    } else {
+        planet_round_borrow.clone().unwrap().orbital_period
+    };
+    planet_data.rotation_period = 1.0 / (1.0 / num18 + 1.0 / planet_data.rotation_period);
+    if orbit_around == 0 && orbit_index <= 4 && !gas_giant {
+        if num14 > 0.9599999785423279 {
+            planet_data.obliquity *= 0.01;
+            planet_data.rotation_period = planet_data.orbital_period;
+            planet_data.singularity |= EPlanetSingularity::TIDAL_LOCKED;
+        } else if num14 > 0.9300000071525574 {
+            planet_data.obliquity *= 0.1;
+            planet_data.rotation_period = planet_data.orbital_period * 0.5;
+            planet_data.singularity |= EPlanetSingularity::TIDAL_LOCKED2;
+        } else if num14 > 0.8999999761581421 {
+            planet_data.obliquity *= 0.2;
+            planet_data.rotation_period = planet_data.orbital_period * 0.25;
+            planet_data.singularity |= EPlanetSingularity::TIDAL_LOCKED4;
+        }
+    }
+    if num14 > 0.85 && num14 <= 0.9 {
+        planet_data.rotation_period = -planet_data.rotation_period;
+        planet_data.singularity |= EPlanetSingularity::CLOCKWISE_ROTATE;
+    }
+    // planet_data.runtime_orbit_rotation =
+    let a_qua: Quaternion = Quaternion::angle_axis(planet_data.orbit_longitude, &VectorF3::new(0.0, 1.0, 0.0));
+    let b_qua: Quaternion = Quaternion::angle_axis(planet_data.orbit_inclination, &VectorF3::new(0.0, 0.0, 1.0));
+    planet_data.runtime_orbit_rotation = a_qua * b_qua;
+    if planet_round_borrow.is_some() {
+        planet_data.runtime_orbit_rotation =
+            planet_round_borrow.clone().unwrap().runtime_orbit_rotation * planet_data.runtime_orbit_rotation;
+    }
+    planet_data.runtime_system_rotation = planet_data.runtime_orbit_rotation
+        * Quaternion::angle_axis(planet_data.obliquity, &VectorF3::new(0.0, 0.0, 1.0));
+    let habitable_radius = star.borrow().habitable_radius;
     todo!()
 }
