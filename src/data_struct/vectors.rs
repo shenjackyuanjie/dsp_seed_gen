@@ -19,6 +19,7 @@ pub trait LocalQuaternion {
     fn look_rotation(forward: &VectorLF3, up: &VectorLF3) -> Quaternion;
     fn angle_axis(angle: f32, axis: &VectorF3) -> Quaternion;
     fn rotation_lf(&self, v: &VectorLF3) -> VectorLF3;
+    fn mul(&self, other: &Quaternion) -> Quaternion;
 }
 
 impl LocalQuaternion for Quaternion {
@@ -40,6 +41,15 @@ impl LocalQuaternion for Quaternion {
         v.y = v.y * num + (self.z as f64 * v.x - self.x as f64 * v.z) * self.w as f64 + self.y as f64 * num2;
         v.z = v.z * num + (self.x as f64 * v.y - self.y as f64 * v.x) * self.w as f64 + self.z as f64 * num2;
         v
+    }
+
+    fn mul(&self, other: &Quaternion) -> Quaternion {
+        let mut result = Quaternion::zeros();
+        result.w = self.w * other.x + self.x * other.w + self.y * other.z - self.z * other.y;
+        result.x = self.w * other.y + self.y * other.w + self.z * other.x - self.x * other.z;
+        result.y = self.w * other.z + self.z * other.w + self.x * other.y - self.y * other.x;
+        result.z = self.w * other.w - self.x * other.x - self.y * other.y - self.z * other.z;
+        result
     }
 }
 

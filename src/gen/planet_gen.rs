@@ -198,10 +198,10 @@ pub fn create_planet(
     // planet_data.runtime_orbit_rotation =
     let a_qua: Quaternion = Quaternion::angle_axis(planet_data.orbit_longitude, &VectorF3::new(0.0, 1.0, 0.0));
     let b_qua: Quaternion = Quaternion::angle_axis(planet_data.orbit_inclination, &VectorF3::new(0.0, 0.0, 1.0));
-    planet_data.runtime_orbit_rotation = a_qua * b_qua;
+    planet_data.runtime_orbit_rotation = a_qua.mul(&b_qua);
     if planet_round_borrow.is_some() {
         planet_data.runtime_orbit_rotation =
-            planet_round_borrow.clone().unwrap().runtime_orbit_rotation * planet_data.runtime_orbit_rotation;
+            planet_round_borrow.clone().unwrap().runtime_orbit_rotation.mul(&planet_data.runtime_orbit_rotation);
     }
     planet_data.runtime_system_rotation = planet_data.runtime_orbit_rotation
         * Quaternion::angle_axis(planet_data.obliquity, &VectorF3::new(0.0, 0.0, 1.0));
