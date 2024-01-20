@@ -203,8 +203,9 @@ pub fn create_planet(
         planet_data.runtime_orbit_rotation =
             planet_round_borrow.clone().unwrap().runtime_orbit_rotation.mul(&planet_data.runtime_orbit_rotation);
     }
-    planet_data.runtime_system_rotation = planet_data.runtime_orbit_rotation
-        * Quaternion::angle_axis(planet_data.obliquity, &VectorF3::new(0.0, 0.0, 1.0));
+    planet_data.runtime_system_rotation = planet_data
+        .runtime_orbit_rotation
+        .mul(&Quaternion::angle_axis(planet_data.obliquity, &VectorF3::new(0.0, 0.0, 1.0)));
     let habitable_radius = star.borrow().habitable_radius;
     todo!()
 }
