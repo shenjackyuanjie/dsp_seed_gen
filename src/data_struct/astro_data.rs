@@ -3,7 +3,7 @@ use crate::data_struct::vectors::{Quaternion, VectorLF3};
 
 pub struct AstroData {
     pub id: i32,
-    pub astro_type: EAstroType,
+    pub r#type: EAstroType,
     pub parent_id: i32,
     pub u_radius: f32,
     pub u_rot: Quaternion,
@@ -16,7 +16,7 @@ impl AstroData {
     pub fn new() -> Self {
         Self {
             id: 0,
-            astro_type: EAstroType::None,
+            r#type: EAstroType::None,
             parent_id: 0,
             u_radius: 0.0,
             u_rot: Quaternion::zeros(),

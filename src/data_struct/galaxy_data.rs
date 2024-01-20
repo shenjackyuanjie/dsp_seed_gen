@@ -1,3 +1,4 @@
+use crate::data_struct::astro_data::AstroData;
 use crate::data_struct::star_data::StarData;
 
 pub const AU: f64 = 40000_f64;
@@ -16,7 +17,8 @@ pub struct GalaxyData {
     pub birth_star_id: i32,
     pub habitable_count: i32,
     // public StarGraphNode[] graphNodes;
-    // public AstroData[25700] astrosData;
+    /// public AstroData[25700] astrosData;
+    pub astros_data: Vec<AstroData>,
     // public PlanetFactory[25700] astrosFactory;
 }
 
@@ -29,6 +31,7 @@ impl GalaxyData {
             birth_planet_id: 0,
             birth_star_id: 0,
             habitable_count: 0,
+            astros_data: Vec::new(),
         }
     }
 }

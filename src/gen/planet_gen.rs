@@ -5,8 +5,7 @@ use dotnet35_rand_rs::DotNet35Random;
 use lerp::Lerp;
 
 // use crate::data_struct::consts::{GRAVITY, PI};
-use crate::data_struct::enums::EPlanetSingularity;
-use crate::data_struct::enums::EStarType;
+use crate::data_struct::enums::{EAstroType, EPlanetSingularity, EPlanetType, EStarType};
 use crate::data_struct::galaxy_data::GalaxyData;
 use crate::data_struct::planet_data::PlanetData;
 use crate::data_struct::star_data::StarData;
@@ -40,6 +39,7 @@ pub fn create_planet(
     planet_data.number = number;
 
     let star_borrow = &(*star.borrow());
+    let galaxy_borrow = &(*galaxy.borrow());
     let planet_round_borrow = &(*planet_data.orbit_around_planet.borrow());
     planet_data.id = star_borrow.astro_id() + index + 1;
 
@@ -206,6 +206,91 @@ pub fn create_planet(
     planet_data.runtime_system_rotation = planet_data
         .runtime_orbit_rotation
         .mul(&Quaternion::angle_axis(planet_data.obliquity, &VectorF3::new(0.0, 0.0, 1.0)));
-    let habitable_radius = star.borrow().habitable_radius;
+    let habitable_radius = star_borrow.habitable_radius;
+    if gas_giant {
+        planet_data.r#type = EPlanetType::Gas;
+        planet_data.radius = 80.0;
+        planet_data.scale = 10.0;
+        planet_data.habitable_bias = 100.0;
+    } else {
+        let mut num19 = (galaxy_borrow.star_count as f32 * 0.29).ceil();
+        if num19 < 11.0 {
+            num19 = 11.0;
+        }
+        let num20 = num19 - galaxy_borrow.habitable_count as f32;
+        let num21 = (galaxy_borrow.star_count - star_borrow.index) as f32;
+        let sun_distance = planet_data.sun_distance;
+        let mut num22 = 1000.0;
+        let mut num23 = 1000.0;
+        if habitable_radius > 0.0 && sun_distance > 0.0 {
+            num23 = sun_distance / habitable_radius;
+            num22 = num23.ln().abs();
+        }
+        let num24 = (habitable_radius.sqrt()).clamp(1.0, 2.0) - 0.04;
+        let mut num25 = num20 / num21;
+        num25 = num25.lerp(0.35, 0.5).clamp(0.08, 0.8);
+        planet_data.habitable_bias = num22 * num24;
+        planet_data.temperature_bias = 1.2 / (num23 + 0.2) - 1.0;
+        let mut num26 = (planet_data.habitable_bias / num25).clamp(0.0, 1.0);
+        let p = num25 * 10.0;
+        num26 = num26.powf(p);
+        if (num12 > num26 as f64 && star_borrow.index > 0)
+            || (planet_data.orbit_around > 0 && planet_data.orbit_index == 1 && star_borrow.index == 0)
+        {
+            planet_data.r#type = EPlanetType::Ocean;
+            galaxy.borrow_mut().habitable_count += 1;
+        } else if num23 < 0.833333 {
+            let num27 = (num23 * 2.5 - 0.85).max(0.15);
+            if num13 < num27 as f64 {
+                planet_data.r#type = EPlanetType::Desert;
+            } else {
+                planet_data.r#type = EPlanetType::Vocano;
+            }
+        } else if num23 < 1.2 {
+            planet_data.r#type = EPlanetType::Desert;
+        } else {
+            let num28 = 0.9 / num23 - 0.1;
+            if num13 < num28 as f64 {
+                planet_data.r#type = EPlanetType::Desert;
+            } else {
+                planet_data.r#type = EPlanetType::Ice;
+            }
+        }
+        planet_data.radius = 200.0;
+    }
+    if planet_data.r#type != EPlanetType::Gas && planet_data.r#type != EPlanetType::None {
+        planet_data.precision = 200;
+        planet_data.segment = 5;
+    } else {
+        planet_data.precision = 64;
+        planet_data.segment = 2;
+    }
+    planet_data.luminosity =
+        (planet_data.star.borrow().light_balance_radius / (planet_data.sun_distance + 0.01)).powf(0.6);
+    if planet_data.luminosity > 1.0 {
+        planet_data.luminosity = planet_data.luminosity.ln() + 1.0;
+        planet_data.luminosity = planet_data.luminosity.ln() + 1.0;
+        planet_data.luminosity = planet_data.luminosity.ln() + 1.0;
+    }
+    planet_data.luminosity = (planet_data.luminosity * 100.0).round() / 100.0;
+    set_planet_theme(&mut planet_data, &theme_ids, rand, rand2, rand3, rand4, theme_seed);
+    let astro_data = &mut (*galaxy.borrow_mut()).astros_data[planet_data.id as usize];
+    astro_data.id = planet_data.id;
+    astro_data.r#type = EAstroType::Planet;
+    astro_data.parent_id = planet_data.star.borrow().astro_id();
+    astro_data.u_radius = planet_data.read_radius();
     todo!()
+}
+
+// public static void SetPlanetTheme(PlanetData planet, int[] themeIds, double rand1, double rand2, double rand3, double rand4, int theme_seed)
+
+pub fn set_planet_theme(
+    planet: &mut PlanetData,
+    theme_ids: &Vec<i32>,
+    rand1: f64,
+    rand2: f64,
+    rand3: f64,
+    rand4: f64,
+    theme_seed: i32,
+) -> () {
 }
