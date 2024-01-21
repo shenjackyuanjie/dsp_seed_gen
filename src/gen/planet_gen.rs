@@ -40,27 +40,29 @@ pub fn create_planet(
 
     let star_borrow = &(*star.borrow());
     let galaxy_borrow = &(*galaxy.borrow());
-    let planet_round_borrow = &(*planet_data.orbit_around_planet.borrow());
+    let planet_round_borrow = (*planet_data.orbit_around_planet.borrow()).clone();
+
     planet_data.id = star_borrow.astro_id() + index + 1;
 
     if orbit_around > 0 {
         let mut j = 0;
-        while j < star_borrow.planet_count {
-            if orbit_around == star_borrow.planets[j as usize].number
-                && star_borrow.planets[j as usize].orbit_around == 0
-            {
-                let data = star_borrow.planets[j as usize].clone();
+
+        while j < star_borrow.planet_count as usize {
+            if orbit_around == star_borrow.planets[j].number && star_borrow.planets[j].orbit_around == 0 {
+                let data = star_borrow.planets[j].clone();
+
                 planet_data.orbit_around_planet.replace(Some(data));
+
                 if orbit_index > 1 {
                     planet_round_borrow.clone().unwrap().singularity |= EPlanetSingularity::MULTIPLE_SATELLITES;
                 }
+
                 break;
             } else {
                 j += 1;
             }
         }
         // Assert.NotNull(planetData.orbitAroundPlanet);
-        let planet_round_borrow = (*planet_data.orbit_around_planet.borrow()).clone();
         assert!(planet_round_borrow.is_some());
     }
 
@@ -104,10 +106,13 @@ pub fn create_planet(
 
     planet_data.orbit_radius = num16;
     planet_data.orbit_inclination = (num4 * 16.0 - 8.0) as f32;
+
     if orbit_around > 0 {
         planet_data.orbit_inclination *= 2.2;
     }
+
     planet_data.orbit_longitude = (num5 * 360.0) as f32;
+
     if star.borrow().star_type > EStarType::NeutronStar {
         if planet_data.orbit_inclination > 0.0 {
             planet_data.orbit_inclination += 3.0;
@@ -115,24 +120,30 @@ pub fn create_planet(
             planet_data.orbit_inclination -= 3.0;
         }
     }
+
     if planet_round_borrow.is_none() {
         planet_data.orbital_period = ((39.47841760435743 * (num16 as f64).powi(3))
-            / (1.3538551990520382e-06 * star.borrow().mass as f64))
+            / (1.353_855_199_052_038_2e-6 * star.borrow().mass as f64))
             .sqrt();
     } else {
-        planet_data.orbital_period = ((39.47841760435743 * (num16 as f64).powi(3)) / 1.0830842106853677e-08).sqrt();
+        planet_data.orbital_period = ((39.47841760435743 * (num16 as f64).powi(3)) / 1.083_084_210_685_367_7e-8).sqrt();
     }
+
     planet_data.orbit_phase = (num6 * 360.0) as f32;
+
     if num14 < 0.03999999910593033 {
         planet_data.obliquity = (num7 * (num8 - 0.5) * 39.9) as f32;
+
         if planet_data.obliquity < 0.0 {
             planet_data.obliquity -= 70.0;
         } else {
             planet_data.obliquity += 70.0;
         }
+
         planet_data.singularity |= EPlanetSingularity::LAY_SIDE;
     } else if num14 < 0.10000000149011612 {
         planet_data.obliquity = (num7 * (num8 - 0.5) * 80.0) as f32;
+
         if planet_data.obliquity < 0.0 {
             planet_data.obliquity -= 30.0;
         } else {
@@ -141,6 +152,7 @@ pub fn create_planet(
     } else {
         planet_data.obliquity = (num7 * (num8 - 0.5) * 60.0) as f32;
     }
+
     planet_data.rotation_period = (num9 * num10 * 1000.0 + 400.0)
         * if orbit_around == 0 {
             num16.powf(0.25) as f64
@@ -151,31 +163,30 @@ pub fn create_planet(
 
     if !gas_giant {
         match star.borrow().star_type {
-            EStarType::WhiteDwarf => {
-                planet_data.rotation_period *= 0.5;
-            }
-            EStarType::NeutronStar => {
-                planet_data.rotation_period *= 0.20000000298023224;
-            }
-            EStarType::BlackHole => {
-                planet_data.rotation_period *= 0.15000000596046448;
-            }
+            EStarType::WhiteDwarf => planet_data.rotation_period *= 0.5,
+            EStarType::NeutronStar => planet_data.rotation_period *= 0.20000000298023224,
+            EStarType::BlackHole => planet_data.rotation_period *= 0.15000000596046448,
             _ => {}
         }
     }
+
     planet_data.rotation_phase = (num11 * 360.0) as f32;
     planet_data.sun_distance = if orbit_around == 0 {
         planet_data.orbit_radius
     } else {
         planet_round_borrow.clone().unwrap().orbit_radius
     };
+
     planet_data.scale = 1.0;
+
     let num18 = if orbit_around == 0 {
         planet_data.orbital_period
     } else {
         planet_round_borrow.clone().unwrap().orbital_period
     };
+
     planet_data.rotation_period = 1.0 / (1.0 / num18 + 1.0 / planet_data.rotation_period);
+
     if orbit_around == 0 && orbit_index <= 4 && !gas_giant {
         if num14 > 0.9599999785423279 {
             planet_data.obliquity *= 0.01;
@@ -191,22 +202,29 @@ pub fn create_planet(
             planet_data.singularity |= EPlanetSingularity::TIDAL_LOCKED4;
         }
     }
+
     if num14 > 0.85 && num14 <= 0.9 {
         planet_data.rotation_period = -planet_data.rotation_period;
         planet_data.singularity |= EPlanetSingularity::CLOCKWISE_ROTATE;
     }
+
     // planet_data.runtime_orbit_rotation =
     let a_qua: Quaternion = Quaternion::angle_axis(planet_data.orbit_longitude, &VectorF3::new(0.0, 1.0, 0.0));
     let b_qua: Quaternion = Quaternion::angle_axis(planet_data.orbit_inclination, &VectorF3::new(0.0, 0.0, 1.0));
+
     planet_data.runtime_orbit_rotation = a_qua.mul(&b_qua);
+
     if planet_round_borrow.is_some() {
         planet_data.runtime_orbit_rotation =
             planet_round_borrow.clone().unwrap().runtime_orbit_rotation.mul(&planet_data.runtime_orbit_rotation);
     }
+
     planet_data.runtime_system_rotation = planet_data
         .runtime_orbit_rotation
         .mul(&Quaternion::angle_axis(planet_data.obliquity, &VectorF3::new(0.0, 0.0, 1.0)));
+
     let habitable_radius = star_borrow.habitable_radius;
+
     if gas_giant {
         planet_data.r#type = EPlanetType::Gas;
         planet_data.radius = 80.0;
@@ -214,26 +232,34 @@ pub fn create_planet(
         planet_data.habitable_bias = 100.0;
     } else {
         let mut num19 = (galaxy_borrow.star_count as f32 * 0.29).ceil();
+
         if num19 < 11.0 {
             num19 = 11.0;
         }
+
         let num20 = num19 - galaxy_borrow.habitable_count as f32;
         let num21 = (galaxy_borrow.star_count - star_borrow.index) as f32;
         let sun_distance = planet_data.sun_distance;
         let mut num22 = 1000.0;
         let mut num23 = 1000.0;
+
         if habitable_radius > 0.0 && sun_distance > 0.0 {
             num23 = sun_distance / habitable_radius;
             num22 = num23.ln().abs();
         }
+
         let num24 = (habitable_radius.sqrt()).clamp(1.0, 2.0) - 0.04;
         let mut num25 = num20 / num21;
+
         num25 = num25.lerp(0.35, 0.5).clamp(0.08, 0.8);
         planet_data.habitable_bias = num22 * num24;
         planet_data.temperature_bias = 1.2 / (num23 + 0.2) - 1.0;
+
         let mut num26 = (planet_data.habitable_bias / num25).clamp(0.0, 1.0);
         let p = num25 * 10.0;
+
         num26 = num26.powf(p);
+
         if (num12 > num26 as f64 && star_borrow.index > 0)
             || (planet_data.orbit_around > 0 && planet_data.orbit_index == 1 && star_borrow.index == 0)
         {
@@ -241,6 +267,7 @@ pub fn create_planet(
             galaxy.borrow_mut().habitable_count += 1;
         } else if num23 < 0.833333 {
             let num27 = (num23 * 2.5 - 0.85).max(0.15);
+
             if num13 < num27 as f64 {
                 planet_data.r#type = EPlanetType::Desert;
             } else {
@@ -250,14 +277,17 @@ pub fn create_planet(
             planet_data.r#type = EPlanetType::Desert;
         } else {
             let num28 = 0.9 / num23 - 0.1;
+
             if num13 < num28 as f64 {
                 planet_data.r#type = EPlanetType::Desert;
             } else {
                 planet_data.r#type = EPlanetType::Ice;
             }
         }
+
         planet_data.radius = 200.0;
     }
+
     if planet_data.r#type != EPlanetType::Gas && planet_data.r#type != EPlanetType::None {
         planet_data.precision = 200;
         planet_data.segment = 5;
@@ -265,20 +295,27 @@ pub fn create_planet(
         planet_data.precision = 64;
         planet_data.segment = 2;
     }
+
     planet_data.luminosity =
         (planet_data.star.borrow().light_balance_radius / (planet_data.sun_distance + 0.01)).powf(0.6);
+
     if planet_data.luminosity > 1.0 {
         planet_data.luminosity = planet_data.luminosity.ln() + 1.0;
         planet_data.luminosity = planet_data.luminosity.ln() + 1.0;
         planet_data.luminosity = planet_data.luminosity.ln() + 1.0;
     }
+
     planet_data.luminosity = (planet_data.luminosity * 100.0).round() / 100.0;
+
     set_planet_theme(&mut planet_data, &theme_ids, rand, rand2, rand3, rand4, theme_seed);
-    let astro_data = &mut (*galaxy.borrow_mut()).astros_data[planet_data.id as usize];
+
+    let astro_data = &mut galaxy.borrow_mut().astros_data[planet_data.id as usize];
+
     astro_data.id = planet_data.id;
     astro_data.r#type = EAstroType::Planet;
     astro_data.parent_id = planet_data.star.borrow().astro_id();
     astro_data.u_radius = planet_data.read_radius();
+
     todo!()
 }
 
@@ -286,11 +323,12 @@ pub fn create_planet(
 
 pub fn set_planet_theme(
     planet: &mut PlanetData,
-    theme_ids: &Vec<i32>,
+    theme_ids: &[i32],
     rand1: f64,
     rand2: f64,
     rand3: f64,
     rand4: f64,
     theme_seed: i32,
-) -> () {
+) {
+    todo!()
 }
